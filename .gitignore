@@ -12,3 +12,6 @@
 *.pcd
 *.obj
 *.mtl
+
+#other
+*.zip

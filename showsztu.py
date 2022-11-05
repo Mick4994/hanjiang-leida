@@ -13,11 +13,12 @@ for i in pcd_list:
     xyz_list += np.asarray(i.points).tolist()
     color_list += np.asarray(i.colors).tolist()
 xyz = np.array(xyz_list)
-colors = np.array(color_list)
+colors = np.array(color_list)//10*10
+print(colors)
 
-sztu_pcd = o3d.geometry.PointCloud()
-sztu_pcd.points = o3d.utility.Vector3dVector(xyz)
-sztu_pcd.colors = o3d.utility.Vector3dVector(colors)
-o3d.visualization.draw([sztu_pcd])
+# sztu_pcd = o3d.geometry.PointCloud()
+# sztu_pcd.points = o3d.utility.Vector3dVector(xyz)
+# sztu_pcd.colors = o3d.utility.Vector3dVector(colors)
+# o3d.visualization.draw([sztu_pcd])
 
 
