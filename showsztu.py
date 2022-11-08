@@ -142,7 +142,7 @@ def match_color():
     xyz = np.load('int_xyz.npy')
     return match_colors, xyz
 
-def xyz_dis():
+def xyz_dis(sztu_pcd):
     x, y, z = zip(*np.asarray(sztu_pcd.points))
     print('x:',max(x)-min(x))
     print('y:',max(y)-min(y))
@@ -349,14 +349,34 @@ def show_rebuild_with_rematch():
     sztu_pcd.colors = o3d.utility.Vector3dVector(match_colors)
     o3d.visualization.draw([sztu_pcd])
 
+def rebuild_texture():
+    f = open('sort_count_dic.txt','r')
+    all_lines = f.readlines()
+    f.close()
+    colors_list = []
+    for line in all_lines[:256]:
+        line = line[line.find('[')+1:line.find(']')]
+        r,g,b = line.split(', ')
+        colors_list.append([int(b),int(g),int(r)])
+    colors = np.array(colors_list, dtype=np.uint8)
+    for i in range(len(colors)):
+        img = np.reshape(colors[i], (1,1,3))
+        cv2.imwrite('./rematch_texture/'+ str(i) + '.png', img)
+        # color = np.array([])
 if __name__ == '__main__':
+    # opencv 默认为BGR ，open3d 默认为RGB
+    rebuild_texture()
+    # img = np.array([255,0,0],dtype=np.uint8)
+    # img = np.reshape(img,(1,1,3))
+    # img = cv2.resize(img,(256,256))
+    
     # match_colors, xyz = match_color()
     # match_colors_copy = match_colors_copy_read()
     # print(colors_255)
     # xyz_dis()
     # sztu_pcd.colors = o3d.utility.Vector3dVector(colors)
     # print(get_runtime()+'loading Vision')
-    show_rebuild_with_rematch()
+    # show_rebuild_with_rematch()
     # count_ahead256()
     # match_count_colors()
 
@@ -377,7 +397,7 @@ if __name__ == '__main__':
     # np.save("match_colors_copy.npy", match_colors_copy)
     # print(match_colors_copy)
     # cv2.namedWindow('img',cv2.WINDOW_NORMAL)
-    # cv2.imshow('img',match_colors_copy)
+    # cv2.imshow('img',img)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
