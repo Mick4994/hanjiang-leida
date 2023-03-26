@@ -7,6 +7,8 @@
 *.txt
 *.json
 *.xml
+*.avi
+*.mp4
 
 #model
 *.pcd
@@ -15,3 +17,6 @@
 
 #other
 *.zip
+
+#cache
+*.pyc
