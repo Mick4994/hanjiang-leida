@@ -18,7 +18,7 @@ hsv_img = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
 img = cv2.inRange(hsv_img , ly, uy)
 
 in_yellow = False
-for index, raw in zip(range(len(img)), img):
+for index, raw in zip(range(len(img)), np.array(img)):
     start_index = 0
     end_index = 0
     is_start = False
