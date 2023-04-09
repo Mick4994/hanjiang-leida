@@ -34,15 +34,15 @@ class Solution:
                 # print(xyxy)
                 armors.append(xyxy)
         xcn_map = []
-        xcn_map = zip(car_xyxy, np.zeros((len(car_xyxy), 4), dtype=np.int32))
-        # for car in car_xyxy:
-        #     car_x1, car_y1, car_x2, car_y2 = car
-        #     for armor in armors:
-        #         armor_x1, armor_y1, armor_x2, armor_y2 = armor
-        #         if armor_x1 > car_x1 and armor_y1 > car_y1:
-        #             if armor_x2 < car_x2 and armor_y2 < car_y2:
-        #                 xcn_map.append([car, armor])
-        #                 break
+        # xcn_map = zip(car_xyxy, np.zeros((len(car_xyxy), 4), dtype=np.int32))
+        for car in car_xyxy:
+            car_x1, car_y1, car_x2, car_y2 = car
+            for armor in armors:
+                armor_x1, armor_y1, armor_x2, armor_y2 = armor
+                if armor_x1 > car_x1 and armor_y1 > car_y1:
+                    if armor_x2 < car_x2 and armor_y2 < car_y2:
+                        xcn_map.append([car, armor])
+                        break
         return xcn_map
     
     def map_pos(xcn_map, maper_points):

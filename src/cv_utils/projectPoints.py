@@ -53,6 +53,7 @@ class Maper:
         # 
         K = np.array([[fx, 0, cx], [0, fy, cy], [0, 0, 1]], dtype=np.float32)
 
+        print(K)
         # 计算被旋转后的平移向量
         R, _ = cv2.Rodrigues(self.camera_dir) 
         # R 叉乘 camera_pos
