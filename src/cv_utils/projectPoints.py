@@ -6,6 +6,10 @@ def CV2RM(points_3d):
     x, y, z = points_3d
     return [z, x, y]
 
+def red2blue(points_3d):
+    x, y, z = points_3d
+    return [25.879 - x, 13.879 - y, z]
+
 class Maper:
     def __init__(self, camera_x = -4.8, camera_y = 3.8, camera_z = 1.2, r_x = 20) -> None:
         # 相机外参
@@ -46,14 +50,20 @@ class Maper:
         image_width = image.shape[1]
         image_height = image.shape[0]
 
+        # d_pixel = 
         fx = self.focal_length * image_width / self.sensor_size_x
         fy = self.focal_length * image_height / self.sensor_size_y
         cx = image_width / 2
         cy = image_height / 2
-        # 
-        K = np.array([[fx, 0, cx], [0, fy, cy], [0, 0, 1]], dtype=np.float32)
 
-        print(K)
+        # 仿真内参
+        K = np.array([[fx, 0, cx], [0, fy, cy], [0, 0, 1]], dtype=np.float32)
+        # 真实内参
+        K = np.array([[1579.6, 0, 627.56], 
+                      [0, 1579.87, 508.65],
+                      [0, 0, 1]], dtype=np.float32)
+
+        # print(K)
         # 计算被旋转后的平移向量
         R, _ = cv2.Rodrigues(self.camera_dir) 
         # R 叉乘 camera_pos
@@ -69,16 +79,21 @@ class Maper:
         return maper_points
 
 
+    def draw_points_noshow(self, image):
+        for p in self.points_2d:
+            cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
+        return image
 
     def draw_points_2d(self, image = np.zeros((1200, 1600, 3))):
         cv2.namedWindow("image", cv2.WINDOW_NORMAL)
-        for p in self.points_2d[::24]:
+        for p in self.points_2d[::30]:
             cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
 
         cv2.imshow("image", image)
         if ord('b') == cv2.waitKey(1):
             cv2.destroyAllWindows()
             exit(0)
+        return image
 
     def demo_display(self, image = np.zeros((1200, 1600, 3))):
         cv2.namedWindow("image", cv2.WINDOW_NORMAL)
@@ -103,8 +118,33 @@ class Maper:
 def mouseCallback(event, x, y, flags, param):
     print(f"event:{event:<20}x:{x:<10}y:{y:<10}flag:{flags:<20}", end='\r')
 
-if __name__ == "__main__":
+def testCamera():
     maper = Maper()
-    maper.get_points_map()
-    maper.demo_display()
+    is_maper = False
+    cap = cv2.VideoCapture(2)
+    cap.set(3, 1280)
+    cap.set(4, 1024)
+    while cap.isOpened():
+        ret, img = cap.read()
+        if ret:
+            if not is_maper:
+                maper.get_points_map(img)
+                is_maper = True
+            else:
+                maper.draw_points_2d(img)
+            # cv2.imshow('img', img)
+            # if cv2.waitKey(1) == ord('b'):
+            #     break
+    else:
+        print(cap)
+    cv2.destroyAllWindows()
+    cap.release()
+
+
+if __name__ == "__main__":
+    # maper = Maper()
+    # maper.get_points_map()
+    # maper.get_points_map(np.zeros((1024, 1280, 3), dtype=np.uint8))
+    # maper.demo_display()
     # maper.demo_display_slow()
+    testCamera()

@@ -8,12 +8,11 @@ from yolo.experimental_copy import attempt_load
 from yolo.datasets_copy import LoadWebcam, LoadImages
 from yolo.general_copy import check_img_size, non_max_suppression, \
     scale_coords, xyxy2xywh, plot_one_box
-
 class YOLO_Detect:
-    def __init__(self, source = 'merge.png') -> None:
+    def __init__(self, source = '2') -> None:
         self.source:str = source
         self.weights:str = 'weights/robomaster.pt'
-        self.imgsz: int = 1200
+        self.imgsz: int = 1280
         self.conf_thres: float = 0.50
         self.iou_thres: float = 0.45
         self.augment:bool = False
@@ -23,7 +22,7 @@ class YOLO_Detect:
         self.src_image = []
         self.output = []
 
-    def detect(self):
+    def detect(self, ctd):
         source, weights, imgsz = self.source, self.weights, self.imgsz
 
         device = torch.device('cuda:0')
@@ -39,13 +38,15 @@ class YOLO_Detect:
         if half:
             model.half()  # to FP16
 
+        
         # Set Dataloader
         if webcam:
             cudnn.benchmark = True  # set True to speed up constant image size inference
-            dataset = LoadWebcam(source, img_size=imgsz, stride=stride)
+            dataset = LoadWebcam(ctd, source, img_size=imgsz, stride=stride)
         else:
             dataset = LoadImages(source, img_size=imgsz, stride=stride)
 
+        
         # Get names and colors
         names = model.module.names if hasattr(model, 'module') else model.names
         colors = [[randint(0, 255) for _ in range(3)] for _ in names]
@@ -53,8 +54,9 @@ class YOLO_Detect:
         # Run inference
         if device.type != 'cpu':
             model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(next(model.parameters())))  # run once
-
+        
         for _, img, im0s, _ in dataset:
+
             img = torch.from_numpy(img).to(device)
             img = img.half() if half else img.float()  # uint8 to fp16/32
             img /= 255.0  # 0 - 255 to 0.0 - 1.0
@@ -93,7 +95,7 @@ class YOLO_Detect:
                         #     f.write(('%g ' * len(line)).rstrip() % line + '\n')
 
                         label = f'{names[int(cls)]} {conf:.2f}'
-                        print("im0.shape:", im0.shape)
+                        # print("im0.shape:", im0.shape)
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
 
                     self.output.append(lines)

@@ -9,16 +9,19 @@ vid_formats = ['mov', 'avi', 'mp4', 'mpg', 'mpeg', 'm4v', 'wmv', 'mkv']  # accep
 img_formats = ['bmp', 'jpg', 'jpeg', 'png', 'tif', 'tiff', 'dng', 'webp', 'mpo']  # acceptable image suffixes
 
 class LoadWebcam:  # for inference
-    def __init__(self, pipe='0', img_size=640, stride=32):
+    def __init__(self, ctd, pipe='0', img_size=640, stride=32):
         self.img_size = img_size
         self.stride = stride
-
+        self.exit_flag = 1
         if pipe.isnumeric():
             pipe = eval(pipe)  # local camera
 
         self.pipe = pipe
         self.cap = cv2.VideoCapture(pipe)  # video capture object
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 3)  # set buffer size
+        self.cap.set(3, 1280)
+        self.cap.set(4, 1024)
+        self.ctd = ctd
 
     def __iter__(self):
         self.count = -1
@@ -26,10 +29,13 @@ class LoadWebcam:  # for inference
 
     def __next__(self):
         self.count += 1
-        if cv2.waitKey(1) == ord('q'):  # q to quit
+        if self.ctd.exit_flag == 0: 
+            print("cap.release")
             self.cap.release()
             cv2.destroyAllWindows()
+            # exit(0)
             raise StopIteration
+            
 
         # Read frame
         if self.pipe == 0:  # local camera
@@ -50,6 +56,7 @@ class LoadWebcam:  # for inference
 
         # print(f'webcam {self.count}: ', end='')
 
+        img0 = cv2.resize(img0, (1280, 1024))
         # Padded resize
         img = letterbox(img0, self.img_size, stride=self.stride)[0]
 
@@ -124,6 +131,7 @@ class LoadImages:  # for inference
             assert img0 is not None, 'Image Not Found ' + path
             print(f'image {self.count}/{self.nf} {path}: ', end='')
 
+        img0 = cv2.resize(img0, (1280, 1024))
         # Padded resize
         img = letterbox(img0, self.img_size, stride=self.stride)[0]
 

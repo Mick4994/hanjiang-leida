@@ -214,6 +214,9 @@ class LoadWebcam:  # for inference
         self.pipe = pipe
         self.cap = cv2.VideoCapture(pipe)  # video capture object
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 3)  # set buffer size
+        self.cap.set(3, 1280)
+        self.cap.set(4, 1024)
+        print(self.cap.get(3), self.cap.get(4))
 
     def __iter__(self):
         self.count = -1
@@ -306,21 +309,11 @@ class LoadStreams:  # multiple IP or RTSP cameras
             n += 1
             # _, self.imgs[index] = cap.read()
             cap.grab()
-            if stream == 4:
-                windows_img = grab_screen((100,100,500,500))
-                bgr_img = cv2.cvtColor(windows_img,cv2.COLOR_BGRA2BGR)
-                images = np.hstack((bgr_img, bgr_img))
-                self.imgs[index] = images
-            elif stream == 3 or stream == 6:
+            if n == 1:  # read every 1th frame
                 success, im = cap.retrieve()
-                images = np.hstack((im, im))
-                self.imgs[index] = images
-            else:
-                if n == 4:  # read every 4th frame
-                    success, im = cap.retrieve()
-                    self.imgs[index] = im if success else self.imgs[index] * 0
-                    n = 0
-            time.sleep(1 / self.fps)  # wait time
+                self.imgs[index] = im if success else self.imgs[index] * 0
+                n = 0
+            # time.sleep(1 / self.fps)  # wait time
 
     def __iter__(self):
         self.count = -1

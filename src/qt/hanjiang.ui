@@ -35,7 +35,8 @@
    <string>hanjiang-leida</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="11"/>
+   <iconset theme="11">
+    <normaloff>F:/Users/11402/.designer/backup</normaloff>F:/Users/11402/.designer/backup</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -148,7 +149,7 @@
   <widget class="QWidget" name="verticalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>470</x>
+     <x>460</x>
      <y>70</y>
      <width>68</width>
      <height>291</height>
@@ -156,7 +157,7 @@
    </property>
    <layout class="QVBoxLayout" name="args_list">
     <item>
-     <widget class="QLabel" name="label_15">
+     <widget class="QLabel" name="x_label">
       <property name="maximumSize">
        <size>
         <width>100</width>
@@ -166,8 +167,14 @@
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;x(cm):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;x(cm):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -175,7 +182,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_14">
+     <widget class="QLabel" name="y_label">
       <property name="maximumSize">
        <size>
         <width>100</width>
@@ -185,8 +192,14 @@
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;y(cm):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;y(cm):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -194,7 +207,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_13">
+     <widget class="QLabel" name="z_label">
       <property name="maximumSize">
        <size>
         <width>100</width>
@@ -204,8 +217,14 @@
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;z(cm):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;z(cm):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -213,7 +232,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_12">
+     <widget class="QLabel" name="pitch_label">
       <property name="maximumSize">
        <size>
         <width>100</width>
@@ -223,8 +242,14 @@
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
       <property name="text">
-       <string>pitch(deg):</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;pitch(deg):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -232,7 +257,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_11">
+     <widget class="QLabel" name="yaw_label">
       <property name="maximumSize">
        <size>
         <width>100</width>
@@ -242,8 +267,14 @@
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
       <property name="text">
-       <string>yaw(deg):</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;yaw(deg):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -251,7 +282,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_10">
+     <widget class="QLabel" name="roll_label">
       <property name="maximumSize">
        <size>
         <width>100</width>
@@ -261,8 +292,14 @@
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;roll(deg):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;roll(deg):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -280,9 +317,9 @@
      <height>291</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="args_list_2">
+   <layout class="QVBoxLayout" name="spinBox_list">
     <item>
-     <widget class="QSpinBox" name="spinBox_3">
+     <widget class="QSpinBox" name="x_spinBox">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -307,7 +344,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QSpinBox" name="spinBox">
+     <widget class="QSpinBox" name="y_spinBox">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -332,7 +369,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QSpinBox" name="spinBox_6">
+     <widget class="QSpinBox" name="z_spinBox">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -357,7 +394,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QSpinBox" name="spinBox_5">
+     <widget class="QSpinBox" name="pitch_spinBox">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -382,7 +419,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QSpinBox" name="spinBox_4">
+     <widget class="QSpinBox" name="yaw_spinBox">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -407,7 +444,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QSpinBox" name="spinBox_2">
+     <widget class="QSpinBox" name="roll_spinBox">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -433,17 +470,23 @@
     </item>
    </layout>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="Camera_label">
    <property name="geometry">
     <rect>
-     <x>510</x>
+     <x>480</x>
      <y>20</y>
-     <width>221</width>
-     <height>41</height>
+     <width>271</width>
+     <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{
+	border-radius:10px;
+	background-color: rgb(254, 254, 254)
+}</string>
+   </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; font-weight:600;&quot;&gt;Camera adjustment&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:16pt; font-weight:500;&quot;&gt;Camera adjustment&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -462,33 +505,120 @@
     <string>SetDefault</string>
    </property>
   </widget>
-  <widget class="QWidget" name="verticalLayoutWidget_4">
+  <widget class="QLabel" name="serial_data">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>50</y>
-     <width>160</width>
-     <height>80</height>
+     <y>10</y>
+     <width>161</width>
+     <height>31</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout"/>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:16pt; font-weight:300;&quot;&gt;serial data&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
   </widget>
-  <widget class="QFrame" name="frame">
+  <widget class="QGraphicsView" name="graphicsView">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>150</y>
-     <width>321</width>
-     <height>231</height>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>400</height>
     </rect>
    </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
+   <property name="minimumSize">
+    <size>
+     <width>800</width>
+     <height>400</height>
+    </size>
    </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
+   <property name="maximumSize">
+    <size>
+     <width>800</width>
+     <height>400</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{
+	
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.965909, y2:0.471, stop:0 rgba(152, 155, 133, 255), stop:1 rgba(183, 227, 226, 255));
+}</string>
    </property>
   </widget>
+  <widget class="QLabel" name="img_label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>90</y>
+     <width>400</width>
+     <height>280</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{
+	border-radius:10px;
+	background-color: rgb(254, 254, 254)
+}</string>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;显示实时画面&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>40</y>
+     <width>401</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{
+	border-radius:10px;
+	background-color: rgb(254, 254, 254)
+}</string>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;'\xa5\x0d\x01\x66\x03\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00..'&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="grass">
+   <property name="geometry">
+    <rect>
+     <x>453</x>
+     <y>11</y>
+     <width>331</width>
+     <height>361</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{
+	border-radius:10px;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.965909, y2:0.471, stop:0 rgba(143, 143, 141, 255), stop:1 rgba(207, 213, 214, 200))
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <zorder>graphicsView</zorder>
+  <zorder>grass</zorder>
+  <zorder>verticalLayoutWidget</zorder>
+  <zorder>verticalLayoutWidget_2</zorder>
+  <zorder>verticalLayoutWidget_3</zorder>
+  <zorder>Camera_label</zorder>
+  <zorder>pushButton</zorder>
+  <zorder>serial_data</zorder>
+  <zorder>img_label</zorder>
+  <zorder>label_3</zorder>
  </widget>
  <resources>
   <include location="br.qrc"/>
@@ -497,7 +627,7 @@
   <connection>
    <sender>roll</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBox_2</receiver>
+   <receiver>roll_spinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -511,7 +641,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>spinBox_2</sender>
+   <sender>roll_spinBox</sender>
    <signal>valueChanged(int)</signal>
    <receiver>roll</receiver>
    <slot>setValue(int)</slot>
@@ -529,7 +659,7 @@
   <connection>
    <sender>yaw</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBox_4</receiver>
+   <receiver>yaw_spinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -543,7 +673,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>spinBox_4</sender>
+   <sender>yaw_spinBox</sender>
    <signal>valueChanged(int)</signal>
    <receiver>yaw</receiver>
    <slot>setValue(int)</slot>
@@ -559,7 +689,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>spinBox_5</sender>
+   <sender>pitch_spinBox</sender>
    <signal>valueChanged(int)</signal>
    <receiver>pitch</receiver>
    <slot>setValue(int)</slot>
@@ -575,7 +705,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>spinBox_6</sender>
+   <sender>z_spinBox</sender>
    <signal>valueChanged(int)</signal>
    <receiver>z_slider</receiver>
    <slot>setValue(int)</slot>
@@ -593,7 +723,7 @@
   <connection>
    <sender>z_slider</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBox_6</receiver>
+   <receiver>z_spinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -609,7 +739,7 @@
   <connection>
    <sender>y_slider</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBox</receiver>
+   <receiver>y_spinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -623,7 +753,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>spinBox</sender>
+   <sender>y_spinBox</sender>
    <signal>valueChanged(int)</signal>
    <receiver>y_slider</receiver>
    <slot>setValue(int)</slot>
@@ -639,7 +769,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>spinBox_3</sender>
+   <sender>x_spinBox</sender>
    <signal>valueChanged(int)</signal>
    <receiver>x_slider</receiver>
    <slot>setValue(int)</slot>
@@ -657,7 +787,7 @@
   <connection>
    <sender>x_slider</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBox_3</receiver>
+   <receiver>x_spinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -673,7 +803,7 @@
   <connection>
    <sender>pitch</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBox_5</receiver>
+   <receiver>pitch_spinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
