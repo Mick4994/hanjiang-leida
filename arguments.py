@@ -5,13 +5,17 @@ Camera_X = -4.8 #云台相机位姿
 Camera_Y = 3.8
 Camera_Z = 1.2
 Rotato_X = 20
+Rotato_Yaw = 0
+Rotato_roll = 0
 
 red_robot_id_serial = [1, 2, 3, 4, 5] # 串口协议红/蓝方机器人id
 blue_robot_id_serial = [101, 102, 103, 104, 105]
 
+points_distance = 2
+
 # 硬件参数：
 COM = "COM4" # 串口号
-SOURCE = "2" #视频/图片源 "1600x1200.png"
+SOURCE = "0" #视频/图片源 "1600x1200.png"
 
 
 # yolo参数

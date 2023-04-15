@@ -3,7 +3,7 @@ import sys
 import time
 import numpy as np
 from math import sqrt
-
+from random import randint
 from PyQt5.QtWidgets import QApplication, QMainWindow
 
 from arguments import *
@@ -15,6 +15,8 @@ from src.qt.ui import MainUI
 
 cls2serial = np.array([0, 0, 0] + red_robot_id_serial + [0, 0] + blue_robot_id_serial + [0, 0],
                        dtype=np.uint16)
+cls2serial = [0, 0, 0] + red_robot_id_serial + [0, 0] + blue_robot_id_serial + [0, 0]
+
 
 class Car:
     def __init__(self, num, color) -> None:
@@ -35,7 +37,9 @@ class Solution:
         car_xyxy = []
         armors = []
         for line in new_output:
+            # print("\nline:", line)
             cls, *xyxy, conf = line
+            cls = int(cls)
             if is_bule:
                 if cls == 0: # 车标签
                     car_xyxy.append(xyxy)
@@ -79,44 +83,55 @@ class Solution:
             xcnp_map.append([id, min_point_3d])
         return xcnp_map
     
+    def SimOut():
+        cls = randint(3, 7)
+        x1 = randint(200, 1000)
+        y1 = randint(800, 950)
+        x2 = x1 + randint(30, 50)
+        y2 = y1 + randint(30, 50)
+        xyxy = [x1, y1, x2, y2]
+        conf = 0.9
+        line = (cls, *xyxy, conf)
+        return [[line]]
     # def lock2car(self):
     #     pass
 class Control_Thread_Data:
     def __init__(self) -> None:
         self.exit_flag = 1
 
-def backbone(mainWindow: MainUI, yolo_detect: YOLO_Detect, ctd: Control_Thread_Data):
-    serial_sender = SerialSender(com=COM)
-
-    # 等待启动
-    # time.sleep(10)
-
-    start_time = time.time()
+def backbone(mainWindow: MainUI, 
+             yolo_detect: YOLO_Detect, 
+             ctd: Control_Thread_Data,
+             serial_sender: SerialSender):
 
     while 1:
         image = np.array(yolo_detect.src_image)
+        
         yolo_out = yolo_detect.output
+        # yolo_out = Solution.SimOut()
         if len(image):
-            # image = cv2.resize(image, (1600, 1200))
-            # print("image.shape", image.shape)
-            # maper.draw_points_2d(image)
+
             maper = Maper(camera_x = mainWindow.getCameraX(),
                           camera_y = mainWindow.getCameraY(),
                           camera_z = mainWindow.getCameraZ(),
-                               r_x = mainWindow.getPitch())
+                               r_x = mainWindow.getPitch(),
+                               yaw = mainWindow.getYaw(),
+                               roll= mainWindow.getRoll(),
+                               points_dis = mainWindow.getPointsDis())
             maper_points = maper.get_points_map()
             vision_img = maper.draw_points_2d(image)
             # vision_img = maper.draw_points_noshow(image)
             mainWindow.img = vision_img
             if len(yolo_out):
+                # print("")
                 xcn_map = Solution.deal_yolo_out(yolo_out)
+                # print("xcn_map:",xcn_map)
                 if xcn_map:
                     xcnp_map = Solution.map_pos(xcn_map, maper_points)
                     if xcnp_map:
+                        print("send")
                         serial_sender.Send(xcnp_map)
-        print(f'running {time.time() - start_time:>7.2f}s', end='\r')
-        # if not detect_thread.is_alive():
-        #     break
+
         if ctd.exit_flag == 0:
             break
         time.sleep(0.02)
@@ -125,17 +140,24 @@ def backbone(mainWindow: MainUI, yolo_detect: YOLO_Detect, ctd: Control_Thread_D
 
 
 if __name__ == "__main__":
+    serial_sender = SerialSender(com=COM)
     ctd = Control_Thread_Data()
     yolo_detect = YOLO_Detect(source=SOURCE)
-    detect_thread = threading.Thread(target=yolo_detect.detect, args=(ctd, ), daemon=True)
+    detect_thread = threading.Thread(target=yolo_detect.detect, 
+                                     args=(ctd, ), 
+                                     daemon=True)
     detect_thread.start()
 
     leida_app = QApplication(sys.argv)
-    mainWindow = MainUI()
+    mainWindow = MainUI(serialer=serial_sender)
     mainWindow.show()
-    backbone_thread = threading.Thread(target=backbone, args=(mainWindow, yolo_detect, ctd), daemon=True)
+    backbone_thread = threading.Thread(target=backbone, 
+                                       args=(mainWindow, yolo_detect, ctd, serial_sender), 
+                                       daemon=True)
     backbone_thread.start()
     ctd.exit_flag = leida_app.exec_()
-    yolo_detect.exit_flag = ctd.exit_flag
+    for i in range(10):
+        yolo_detect.exit_flag = ctd.exit_flag
+        time.sleep(0.1)
     print("exit_args:", ctd.exit_flag)
     sys.exit(ctd.exit_flag)

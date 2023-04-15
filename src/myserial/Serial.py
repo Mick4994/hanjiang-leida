@@ -1,12 +1,14 @@
 import serial
 import numpy as np
 from crccheck.crc import Crc8, Crc16
+from random import randint
 
 class SerialSender:
     def __init__(self, com = "COM4") -> None:
         self.crc8 = Crc8()
         self.crc16 = Crc16()
         self.com = com
+        self.failed = False
 
         sof = b'\xa5' # 数据帧起始字节，固定值为0xA5
         data_length = b'\x0d' # 数据帧中data的长度
@@ -17,6 +19,8 @@ class SerialSender:
         cmd_id = b'\x03\x03'
 
         self.head_data = frame_header + cmd_id
+
+        self.send_data = []
 
     def Send(self, xcnp_map):
         for id, min_point_3d in xcnp_map:
@@ -35,12 +39,19 @@ class SerialSender:
 
             self.send_data = send_data
 
-            with serial.Serial(port=self.com, 
-                        baudrate=115200, 
-                        bytesize=8, 
-                        stopbits=1) as my_serial:
-                my_serial.write(send_data)
+            try:
+                with serial.Serial(port=self.com, 
+                            baudrate=115200, 
+                            bytesize=8, 
+                            stopbits=1) as my_serial:
+                    my_serial.write(send_data)
 
+                print(f"{randint(0, 9)} send_data:{send_data.hex():<20}", end='\r')
+
+            except:
+                if not self.failed:
+                    print("send failed, please check serial connect")
+                    
 if __name__ == "__main__":
 
     crc8 = Crc8()

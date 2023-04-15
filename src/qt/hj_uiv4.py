@@ -33,7 +33,7 @@ class Ui_leida(object):
         leida.setWindowIcon(icon)
         leida.setStyleSheet("")
         self.verticalLayoutWidget = QtWidgets.QWidget(leida)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(600, 70, 160, 291))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(600, 70, 160, 301))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.slider_list = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.slider_list.setContentsMargins(0, 0, 0, 0)
@@ -72,6 +72,7 @@ class Ui_leida(object):
         self.yaw = QtWidgets.QSlider(self.verticalLayoutWidget)
         self.yaw.setMinimum(-180)
         self.yaw.setMaximum(180)
+        self.yaw.setProperty("value", Rotato_Yaw)
         self.yaw.setOrientation(QtCore.Qt.Horizontal)
         self.yaw.setObjectName("yaw")
         self.slider_list.addWidget(self.yaw)
@@ -79,11 +80,19 @@ class Ui_leida(object):
         self.roll.setEnabled(True)
         self.roll.setMinimum(-180)
         self.roll.setMaximum(180)
+        self.roll.setProperty("value", Rotato_roll)
         self.roll.setOrientation(QtCore.Qt.Horizontal)
         self.roll.setObjectName("roll")
         self.slider_list.addWidget(self.roll)
+        self.points_dis_Slider = QtWidgets.QSlider(self.verticalLayoutWidget)
+        self.points_dis_Slider.setOrientation(QtCore.Qt.Horizontal)
+        self.points_dis_Slider.setObjectName("points_dis_Slider")
+        self.points_dis_Slider.setMinimum(1)
+        self.points_dis_Slider.setMaximum(100)
+        self.points_dis_Slider.setProperty("value", points_distance)
+        self.slider_list.addWidget(self.points_dis_Slider)
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(leida)
-        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(460, 70, 68, 291))
+        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(460, 70, 68, 301))
         self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
         self.args_list = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
         self.args_list.setContentsMargins(0, 0, 0, 0)
@@ -148,8 +157,18 @@ class Ui_leida(object):
         self.roll_label.setAlignment(QtCore.Qt.AlignCenter)
         self.roll_label.setObjectName("roll_label")
         self.args_list.addWidget(self.roll_label)
+        self.points_dis_label = QtWidgets.QLabel(self.verticalLayoutWidget_2)
+        self.points_dis_label.setMaximumSize(QtCore.QSize(100, 22))
+        self.points_dis_label.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.points_dis_label.setStyleSheet("QWidget{\n"
+"    background-color:rgb(255, 255, 255);\n"
+"    border-radius:5px;\n"
+"}")
+        self.points_dis_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.points_dis_label.setObjectName("points_dis_label")
+        self.args_list.addWidget(self.points_dis_label)
         self.verticalLayoutWidget_3 = QtWidgets.QWidget(leida)
-        self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(540, 70, 54, 291))
+        self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(540, 70, 54, 301))
         self.verticalLayoutWidget_3.setObjectName("verticalLayoutWidget_3")
         self.spinBox_list = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_3)
         self.spinBox_list.setContentsMargins(0, 0, 0, 0)
@@ -202,6 +221,14 @@ class Ui_leida(object):
         self.roll_spinBox.setProperty("value", Rotato_roll)
         self.roll_spinBox.setObjectName("roll_spinBox")
         self.spinBox_list.addWidget(self.roll_spinBox)
+        self.points_dis_spinBox = QtWidgets.QSpinBox(self.verticalLayoutWidget_3)
+        self.points_dis_spinBox.setMinimumSize(QtCore.QSize(0, 22))
+        self.points_dis_spinBox.setMaximumSize(QtCore.QSize(16777215, 22))
+        self.points_dis_spinBox.setMinimum(1)
+        self.points_dis_spinBox.setMaximum(100)
+        self.points_dis_spinBox.setProperty("value", points_distance)
+        self.points_dis_spinBox.setObjectName("points_dis_spinBox")
+        self.spinBox_list.addWidget(self.points_dis_spinBox)
         self.Camera_label = QtWidgets.QLabel(leida)
         self.Camera_label.setGeometry(QtCore.QRect(480, 20, 271, 51))
         self.Camera_label.setStyleSheet("QWidget{\n"
@@ -233,14 +260,15 @@ class Ui_leida(object):
 "}")
         self.img_label.setAlignment(QtCore.Qt.AlignCenter)
         self.img_label.setObjectName("img_label")
-        self.label_3 = QtWidgets.QLabel(leida)
-        self.label_3.setGeometry(QtCore.QRect(20, 40, 401, 41))
-        self.label_3.setStyleSheet("QWidget{\n"
+        self.serial_data_background = QtWidgets.QLabel(leida)
+        self.serial_data_background.setGeometry(QtCore.QRect(20, 40, 401, 41))
+        self.serial_data_background.setStyleSheet("QWidget{\n"
 "    border-radius:10px;\n"
 "    background-color: rgb(254, 254, 254)\n"
 "}")
-        self.label_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.label_3.setObjectName("label_3")
+        self.serial_data_background.setText("")
+        self.serial_data_background.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.serial_data_background.setObjectName("serial_data_background")
         self.grass = QtWidgets.QLabel(leida)
         self.grass.setGeometry(QtCore.QRect(453, 11, 331, 361))
         self.grass.setStyleSheet("QWidget{\n"
@@ -249,6 +277,9 @@ class Ui_leida(object):
 "}")
         self.grass.setText("")
         self.grass.setObjectName("grass")
+        self.serial_send = QtWidgets.QLabel(leida)
+        self.serial_send.setGeometry(QtCore.QRect(33, 39, 371, 41))
+        self.serial_send.setObjectName("serial_send")
         self.graphicsView.raise_()
         self.grass.raise_()
         self.verticalLayoutWidget.raise_()
@@ -258,7 +289,8 @@ class Ui_leida(object):
         self.SetDefault.raise_()
         self.serial_data.raise_()
         self.img_label.raise_()
-        self.label_3.raise_()
+        self.serial_data_background.raise_()
+        self.serial_send.raise_()
 
         self.retranslateUi(leida)
         self.roll.valueChanged['int'].connect(self.roll_spinBox.setValue) # type: ignore
@@ -273,11 +305,11 @@ class Ui_leida(object):
         self.x_spinBox.valueChanged['int'].connect(self.x_slider.setValue) # type: ignore
         self.x_slider.valueChanged['int'].connect(self.x_spinBox.setValue) # type: ignore
         self.pitch.valueChanged['int'].connect(self.pitch_spinBox.setValue) # type: ignore
-
+        self.points_dis_Slider.valueChanged['int'].connect(self.points_dis_spinBox.setValue) # type: ignore
+        self.points_dis_spinBox.valueChanged['int'].connect(self.points_dis_Slider.setValue) # type: ignore
         self.SetDefault.clicked.connect(self.SetDefaultEvent)
-
         QtCore.QMetaObject.connectSlotsByName(leida)
-        
+
     def SetDefaultEvent(self):
         self.x_slider.setProperty("value", int(Camera_X * 100))
         self.x_slider.setSliderPosition(int(Camera_X * 100))
@@ -291,6 +323,7 @@ class Ui_leida(object):
         self.yaw.setSliderPosition(Rotato_Yaw)
         self.roll.setProperty("value", Rotato_roll)
         self.roll.setSliderPosition(Rotato_roll)
+        self.points_dis_spinBox.setProperty("value", points_distance)
 
     def retranslateUi(self, leida):
         _translate = QtCore.QCoreApplication.translate
@@ -301,10 +334,10 @@ class Ui_leida(object):
         self.pitch_label.setText(_translate("leida", "<html><head/><body><p><span style=\"font-family:\'Microsoft YaHei\'; font-size:9pt; font-weight:300;\">pitch(deg):</span></p></body></html>"))
         self.yaw_label.setText(_translate("leida", "<html><head/><body><p><span style=\"font-family:\'Microsoft YaHei\'; font-size:9pt; font-weight:300;\">yaw(deg):</span></p></body></html>"))
         self.roll_label.setText(_translate("leida", "<html><head/><body><p><span style=\"font-family:\'Microsoft YaHei\'; font-size:9pt; font-weight:300;\">roll(deg):</span></p></body></html>"))
+        self.points_dis_label.setText(_translate("leida", "<html><head/><body><p><span style=\"font-family:\'Microsoft YaHei\'; font-size:9pt; font-weight:300;\">points_dis:</span></p></body></html>"))
         self.Camera_label.setText(_translate("leida", "<html><head/><body><p><span style=\"font-family:\'Microsoft YaHei\'; font-size:16pt; font-weight:500;\">Camera adjustment</span></p></body></html>"))
         self.SetDefault.setText(_translate("leida", "SetDefault"))
         self.serial_data.setText(_translate("leida", "<html><head/><body><p><span style=\"font-family:\'Microsoft YaHei\'; font-size:16pt; font-weight:300;\">serial data</span></p></body></html>"))
-        self.img_label.setText(_translate("leida", "<html><head/><body><p><span style=\"font-family:\'Microsoft YaHei\'; font-size:16pt; font-weight:300;\">显示实时画面</span></p></body></html>"))
-        self.label_3.setText(_translate("leida", "<html><head/><body><p><span style=\"font-family:\'Microsoft YaHei\'; font-size:9pt; font-weight:300;\">___None___</span></p></body></html>"))
-
+        self.img_label.setText(_translate("leida", "<html><head/><body><p><span style=\"font-family:\'Microsoft YaHei\'; font-size:9pt; font-weight:300;\">显示实时画面</span></p></body></html>"))
+        self.serial_send.setText(_translate("leida", "<html><head/><body><p><span style=\"font-family:\'Microsoft YaHei\'; font-size:9pt; font-weight:300;\">None</span></p></body></html>"))
 

@@ -11,19 +11,28 @@ def red2blue(points_3d):
     return [25.879 - x, 13.879 - y, z]
 
 class Maper:
-    def __init__(self, camera_x = -4.8, camera_y = 3.8, camera_z = 1.2, r_x = 20) -> None:
+    def __init__(self, 
+            camera_x = -4.8, 
+            camera_y = 3.8, 
+            camera_z = 1.2, 
+            r_x = 20,
+            yaw = 0,
+            roll = 0,
+            points_dis = 24) -> None:
         # 相机外参
         self.camera_pos = np.array([camera_x, camera_y, camera_z], dtype=np.float32)
-        self.camera_dir = np.array([radians(r_x), radians(0), radians(0)], dtype=np.float32)
+        self.camera_dir = np.array([radians(r_x), radians(yaw), radians(roll)], dtype=np.float32)
+        self.points_dis = points_dis
 
         # 焦距与传感器尺寸
         self.focal_length = 6
-        self.sensor_size_x = 7.176 # 1/1.8 inch
-        self.sensor_size_y = 5.32
+        self.sensor_size_x = 5.37 # 1/2.7 inch
+        self.sensor_size_y = 4.04
+        self.piexel_size = 4e-3
 
         self.mapper = []
 
-    def get_points_map(self, image = np.zeros((1200, 1600, 3), dtype=np.uint8)):
+    def get_points_map(self, image = np.zeros((1024, 1280, 3), dtype=np.uint8)):
         # 场地点云
 
         points_3d = []
@@ -51,18 +60,21 @@ class Maper:
         image_height = image.shape[0]
 
         # d_pixel = 
-        fx = self.focal_length * image_width / self.sensor_size_x
-        fy = self.focal_length * image_height / self.sensor_size_y
+        fx = self.focal_length / self.piexel_size
+        fy = self.focal_length / self.piexel_size
         cx = image_width / 2
         cy = image_height / 2
 
         # 仿真内参
-        K = np.array([[fx, 0, cx], [0, fy, cy], [0, 0, 1]], dtype=np.float32)
+        K = np.array([[fx, 0, cx], 
+                      [0, fy, cy], 
+                      [0,  0,  1]], dtype=np.float32)
         # 真实内参
-        K = np.array([[1579.6, 0, 627.56], 
-                      [0, 1579.87, 508.65],
-                      [0, 0, 1]], dtype=np.float32)
+        # K = np.array([[1579.6, 0, 627.56], 
+        #               [0, 1579.87, 508.65],
+        #               [0, 0, 1]], dtype=np.float32)
 
+        self.K = K
         # print(K)
         # 计算被旋转后的平移向量
         R, _ = cv2.Rodrigues(self.camera_dir) 
@@ -70,7 +82,8 @@ class Maper:
         tvec = R @ self.camera_pos      
         # rvec, _ = cv2.Rodrigues(R) 
 
-        points_2d, _ = cv2.projectPoints(points_3d, self.camera_dir, tvec, K, None)
+        points_2d, _ = cv2.projectPoints(
+            points_3d, self.camera_dir, tvec, K, None)
         self.points_2d = np.array(points_2d, dtype=np.int32)
 
         self.reshape_points_2d = np.reshape(self.points_2d, (x_len * z_len, 2))
@@ -84,9 +97,9 @@ class Maper:
             cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
         return image
 
-    def draw_points_2d(self, image = np.zeros((1200, 1600, 3))):
+    def draw_points_2d(self, image = np.zeros((1024, 1280, 3))):
         cv2.namedWindow("image", cv2.WINDOW_NORMAL)
-        for p in self.points_2d[::30]:
+        for p in self.points_2d[::self.points_dis]:
             cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
 
         cv2.imshow("image", image)
@@ -95,7 +108,7 @@ class Maper:
             exit(0)
         return image
 
-    def demo_display(self, image = np.zeros((1200, 1600, 3))):
+    def demo_display(self, image = np.zeros((1024, 1280, 3))):
         cv2.namedWindow("image", cv2.WINDOW_NORMAL)
         for p in self.points_2d:
             cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
@@ -105,7 +118,7 @@ class Maper:
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    def demo_display_slow(self, image = np.zeros((1200, 1600, 3))):
+    def demo_display_slow(self, image = np.zeros((1024, 1280, 3))):
         cv2.namedWindow("image", cv2.WINDOW_NORMAL)
         for p in self.reshape_points_2d:
             cv2.circle(image, p, 5, (0, 255, 0), -1) 
@@ -142,9 +155,10 @@ def testCamera():
 
 
 if __name__ == "__main__":
-    # maper = Maper()
-    # maper.get_points_map()
+    maper = Maper()
+    maper.get_points_map()
+    print("\ncameraMatrix:", maper.K)
     # maper.get_points_map(np.zeros((1024, 1280, 3), dtype=np.uint8))
-    # maper.demo_display()
+    maper.demo_display()
     # maper.demo_display_slow()
-    testCamera()
+    # testCamera()

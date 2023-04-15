@@ -47,7 +47,7 @@
      <x>600</x>
      <y>70</y>
      <width>160</width>
-     <height>291</height>
+     <height>301</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="slider_list">
@@ -144,6 +144,19 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QSlider" name="points_dis">
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="value">
+       <number>24</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QWidget" name="verticalLayoutWidget_2">
@@ -152,7 +165,7 @@
      <x>460</x>
      <y>70</y>
      <width>68</width>
-     <height>291</height>
+     <height>301</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="args_list">
@@ -306,6 +319,31 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QLabel" name="points_label">
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;points_dis:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QWidget" name="verticalLayoutWidget_3">
@@ -314,7 +352,7 @@
      <x>540</x>
      <y>70</y>
      <width>54</width>
-     <height>291</height>
+     <height>301</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="spinBox_list">
@@ -468,6 +506,31 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QSpinBox" name="poins_spinBox">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="value">
+       <number>24</number>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QLabel" name="Camera_label">
@@ -492,7 +555,7 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="SetDefault">
    <property name="geometry">
     <rect>
      <x>690</x>
@@ -568,7 +631,7 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="serial_data_background">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -584,7 +647,7 @@
 }</string>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;'\xa5\x0d\x01\x66\x03\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00..'&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string/>
    </property>
    <property name="alignment">
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -609,16 +672,30 @@
     <string/>
    </property>
   </widget>
+  <widget class="QLabel" name="serial_send">
+   <property name="geometry">
+    <rect>
+     <x>33</x>
+     <y>39</y>
+     <width>371</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;None&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
   <zorder>graphicsView</zorder>
   <zorder>grass</zorder>
   <zorder>verticalLayoutWidget</zorder>
   <zorder>verticalLayoutWidget_2</zorder>
   <zorder>verticalLayoutWidget_3</zorder>
   <zorder>Camera_label</zorder>
-  <zorder>pushButton</zorder>
+  <zorder>SetDefault</zorder>
   <zorder>serial_data</zorder>
   <zorder>img_label</zorder>
-  <zorder>label_3</zorder>
+  <zorder>serial_data_background</zorder>
+  <zorder>serial_send</zorder>
  </widget>
  <resources>
   <include location="br.qrc"/>
@@ -631,12 +708,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>624</x>
-     <y>329</y>
+     <x>625</x>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
-     <x>569</x>
-     <y>329</y>
+     <x>570</x>
+     <y>304</y>
     </hint>
    </hints>
   </connection>
@@ -647,12 +724,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>572</x>
-     <y>337</y>
+     <x>573</x>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
-     <x>642</x>
-     <y>334</y>
+     <x>643</x>
+     <y>304</y>
     </hint>
    </hints>
   </connection>
@@ -663,12 +740,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>620</x>
-     <y>279</y>
+     <x>621</x>
+     <y>264</y>
     </hint>
     <hint type="destinationlabel">
-     <x>560</x>
-     <y>278</y>
+     <x>561</x>
+     <y>264</y>
     </hint>
    </hints>
   </connection>
@@ -679,12 +756,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>559</x>
-     <y>286</y>
+     <x>560</x>
+     <y>264</y>
     </hint>
     <hint type="destinationlabel">
-     <x>630</x>
-     <y>292</y>
+     <x>631</x>
+     <y>264</y>
     </hint>
    </hints>
   </connection>
@@ -695,12 +772,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>564</x>
-     <y>239</y>
+     <x>565</x>
+     <y>224</y>
     </hint>
     <hint type="destinationlabel">
-     <x>659</x>
-     <y>239</y>
+     <x>660</x>
+     <y>224</y>
     </hint>
    </hints>
   </connection>
@@ -711,12 +788,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>572</x>
-     <y>197</y>
+     <x>573</x>
+     <y>184</y>
     </hint>
     <hint type="destinationlabel">
-     <x>622</x>
-     <y>196</y>
+     <x>623</x>
+     <y>184</y>
     </hint>
    </hints>
   </connection>
@@ -727,8 +804,8 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>643</x>
-     <y>185</y>
+     <x>644</x>
+     <y>184</y>
     </hint>
     <hint type="destinationlabel">
      <x>542</x>
@@ -759,12 +836,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>586</x>
-     <y>153</y>
+     <x>587</x>
+     <y>144</y>
     </hint>
     <hint type="destinationlabel">
-     <x>621</x>
-     <y>150</y>
+     <x>622</x>
+     <y>144</y>
     </hint>
    </hints>
   </connection>
@@ -775,8 +852,8 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>563</x>
-     <y>106</y>
+     <x>564</x>
+     <y>104</y>
     </hint>
     <hint type="destinationlabel">
      <x>624</x>
@@ -791,8 +868,8 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>639</x>
-     <y>107</y>
+     <x>640</x>
+     <y>104</y>
     </hint>
     <hint type="destinationlabel">
      <x>584</x>
@@ -807,12 +884,44 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>667</x>
-     <y>230</y>
+     <x>668</x>
+     <y>224</y>
     </hint>
     <hint type="destinationlabel">
-     <x>570</x>
-     <y>232</y>
+     <x>571</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>points_dis</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>poins_spinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>645</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>574</x>
+     <y>331</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>poins_spinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>points_dis</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>564</x>
+     <y>338</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>625</x>
+     <y>337</y>
     </hint>
    </hints>
   </connection>
