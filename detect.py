@@ -3,7 +3,7 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 from random import randint
-
+from arguments import *
 from yolo.experimental_copy import attempt_load
 from yolo.datasets_copy import LoadWebcam, LoadImages
 from yolo.general_copy import check_img_size, non_max_suppression, \
@@ -11,7 +11,7 @@ from yolo.general_copy import check_img_size, non_max_suppression, \
 class YOLO_Detect:
     def __init__(self, source = '2') -> None:
         self.source:str = source
-        self.weights:str = 'weights/robomaster.pt'
+        self.weights:str = 'yolov5/weights/' + Yolo_Weight
         self.imgsz: int = 1280
         self.conf_thres: float = 0.50
         self.iou_thres: float = 0.45

@@ -1,0 +1,15 @@
+opencv-python>=4.5.2
+open3d
+matplotlib>=3.2.2
+numpy>=1.18.5
+Pillow
+PyYAML>=5.3.1
+scipy>=1.4.1
+pyserial
+torch==1.7.0
+torchvision==0.8.1
+tqdm>=4.41.0
+seaborn>=0.11.0
+PyQt5
+PyQt5-tools
+pandas

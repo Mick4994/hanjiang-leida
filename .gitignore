@@ -20,3 +20,5 @@
 
 #cache
 *.pyc
+
+!requirements.txt

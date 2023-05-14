@@ -1,14 +1,21 @@
 import numpy as np
 import cv2
 from math import radians
+try:
+    from arguments import *
+except:
+    import sys
+    import os
+    sys.path.append(os.getcwd())
+    from arguments import *
 
 def CV2RM(points_3d):
     x, y, z = points_3d
-    return [z, x, y]
+    return [z, x, -y]
 
 def red2blue(points_3d):
     x, y, z = points_3d
-    return [25.879 - x, 13.879 - y, z]
+    return [RM_FIELD_LENGTH - x, RM_FIELD_WEIGHT - y, z]
 
 class Maper:
     def __init__(self, 
@@ -35,21 +42,25 @@ class Maper:
     def get_points_map(self, image = np.zeros((1024, 1280, 3), dtype=np.uint8)):
         # 场地点云
 
-        points_3d = []
-        distance = 0.2
-        x_len = int(13.879 // distance) + 1
-        z_len = int(25.879 // distance) + 1
+        # points_3d = []
+        # distance = 0.2
+        # x_len = int(13.879 // distance) + 1
+        # z_len = int(25.879 // distance) + 1
 
-        x = 0
-        z = 0
-        while x < 13.879:
-            while z < 25.879:
-                points_3d.append([x, 0, z])
-                z += distance
-            x += distance
-            z = 0
+        # x = 0
+        # z = 0
+        # while x < 13.879:
+        #     while z < 25.879:
+        #         points_3d.append([x, 0, z])
+        #         z += distance
+        #     x += distance
+        #     z = 0
+        try:
+            points_3d = np.load('src/cv_utils/' + Load_NPY)
+        except:
+            points_3d = np.load(Load_NPY)
 
-        self.reshape_points_3d = np.reshape(points_3d, (x_len, z_len, 3))
+        # self.reshape_points_3d = np.reshape(points_3d, (x_len, z_len, 3))
 
         points_3d = np.array(points_3d, dtype=np.float32)
 
@@ -85,8 +96,8 @@ class Maper:
         points_2d, _ = cv2.projectPoints(
             points_3d, self.camera_dir, tvec, K, None)
         self.points_2d = np.array(points_2d, dtype=np.int32)
-
-        self.reshape_points_2d = np.reshape(self.points_2d, (x_len * z_len, 2))
+        # print(self.points_2d.shape)
+        self.reshape_points_2d = np.reshape(self.points_2d, (self.points_2d.shape[0], 2))
 
         maper_points = list(zip(self.points_3d, self.reshape_points_2d))
         return maper_points
