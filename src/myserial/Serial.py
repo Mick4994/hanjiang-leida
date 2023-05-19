@@ -12,7 +12,7 @@ class SerialSender:
 
         sof = b'\xa5' # 数据帧起始字节，固定值为0xA5
         data_length = b'\x0d' # 数据帧中data的长度
-        seq = b'\x01' # 包序号
+        seq = b'\x00' # 包序号   若不需要分包则为0
         frame_header = sof + data_length + seq
         frame_header += bytes([self.crc8.calc(frame_header)])
 
@@ -87,7 +87,7 @@ if __name__ == "__main__":
                        stopbits=1) as my_serial:
         my_serial.write(send_data)
 
-    print(send_data.hex())
+    # print(send_data.hex())
 
 
     

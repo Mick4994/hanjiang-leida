@@ -19,8 +19,8 @@ class LoadWebcam:  # for inference
         self.pipe = pipe
         self.cap = cv2.VideoCapture(pipe)  # video capture object
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 3)  # set buffer size
-        self.cap.set(3, 1280)
-        self.cap.set(4, 1024)
+        # self.cap.set(3, 1280)
+        # self.cap.set(4, 1024)
         self.ctd = ctd
 
     def __iter__(self):
@@ -56,7 +56,7 @@ class LoadWebcam:  # for inference
 
         # print(f'webcam {self.count}: ', end='')
 
-        img0 = cv2.resize(img0, (1280, 1024))
+        # img0 = cv2.resize(img0, (1280, 1024))
         # Padded resize
         img = letterbox(img0, self.img_size, stride=self.stride)[0]
 
@@ -131,7 +131,7 @@ class LoadImages:  # for inference
             assert img0 is not None, 'Image Not Found ' + path
             print(f'image {self.count}/{self.nf} {path}: ', end='')
 
-        img0 = cv2.resize(img0, (1280, 1024))
+        # img0 = cv2.resize(img0, (1280, 1024))
         # Padded resize
         img = letterbox(img0, self.img_size, stride=self.stride)[0]
 

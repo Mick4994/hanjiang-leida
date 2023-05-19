@@ -39,7 +39,7 @@ class Maper:
 
         self.mapper = []
 
-    def get_points_map(self, image = np.zeros((1024, 1280, 3), dtype=np.uint8)):
+    def get_points_map(self, image): # = np.zeros((1024, 1280, 3), dtype=np.uint8)
         # 场地点云
 
         # points_3d = []
@@ -69,6 +69,7 @@ class Maper:
         # 图像尺寸
         image_width = image.shape[1]
         image_height = image.shape[0]
+        # print(image.shape, end='\r')
 
         # d_pixel = 
         fx = self.focal_length / self.piexel_size

@@ -74,6 +74,11 @@ def draw_boxes(img, bbox, identities=None, offset=(0, 0)):
                 t_size[1] + 4), cv2.FONT_HERSHEY_PLAIN, 5, [255, 255, 255], 3) #修改 2,.,2
     return img
 
+def draw_armor(img, bboxs):
+    for box in bboxs:
+        x1, y1, x2, y2 = box
+        cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 255), 5) 
+
 class YOLO_DEEPSORT:
     def __init__(self, source = 'yolov5/0000-0170.mp4') -> None:
         self.out = 'output'
@@ -98,6 +103,7 @@ class YOLO_DEEPSORT:
         self.armor_bboxs = []
         self.car_bboxs = []
         self.src_img = []
+        self.out_img = []
 
     def detect(self, ctd):
         out = self.out
@@ -228,6 +234,9 @@ class YOLO_DEEPSORT:
                         bbox_xyxy = outputs[:, :4]
                         identities = outputs[:, -1]
                         draw_boxes(im0, bbox_xyxy, identities)
+                        draw_armor(im0, self.armor_bboxs)
+                        self.out_img = im0
+
                         # to MOT format
                         tlwh_bboxs = xyxy_to_tlwh(bbox_xyxy)
 
