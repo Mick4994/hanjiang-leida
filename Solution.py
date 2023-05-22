@@ -102,7 +102,7 @@ class Car:
         out = model(input)
         # print(out[0].tolist())
         max_index = np.argmax(out[0].tolist())
-        self.armor[max_index] += 1
+        self.armor[max_index] += 1 
         # print(max_index, out[0][max_index])
         serial_shifting = 100 if self.color == 'blue' else 0
         self.serial_id = np.argmax(np.array(self.armor)) + serial_shifting
@@ -173,6 +173,32 @@ def drawFPS(image, spread):
     cv2.putText(image, fps, (10, 50), 
                 cv2.FONT_HERSHEY_COMPLEX_SMALL, 4,
                     (0, 255,255), 2)
+
+class Camera:
+    def __init__(self, 
+            camera_x = -4.8, 
+            camera_y = 3.8, 
+            camera_z = 1.2, 
+            r_x = 20,
+            yaw = 0,
+            roll = 0,
+            points_dis = 24) -> None:
+        self.camera_x = camera_x
+        self.camera_y = camera_y
+        self.camera_z = camera_z
+        self.r_x = r_x
+        self.yaw = yaw
+        self.roll = roll
+        self.points_dis = points_dis
+    def __eq__(self, other) -> bool:
+        return (self.camera_x == other.camera_x 
+            and self.camera_y == other.camera_y
+            and self.camera_z == other.camera_z
+            and self.r_x == other.r_x
+            and self.yaw == other.yaw
+            and self.points_dis == other.points_dis)
+
+
 class Solutionv2:
     def __init__(self) -> None:
         self.exit_flag = -1
@@ -199,13 +225,13 @@ class Solutionv2:
                 self.car_dict[id] : Car = Car(bbox)
             else:
                 self.car_dict[id].bbox = bbox
-        #         self.car_dict[id].live = self.setlive
-        #     self.car_dict[id].live -= 1
-        #     if self.car_dict[id].live <= 0:
-        #         self.car_dict[id].append(id)
-        #     # self.car_bboxs.append(bbox)
-        # for id in pop_list:
-        #     self.car_dict.pop(id)
+                self.car_dict[id].live = self.setlive
+            self.car_dict[id].live -= 1
+            if self.car_dict[id].live <= 0:
+                self.car_dict[id].append(id)
+            # self.car_bboxs.append(bbox)
+        for id in pop_list:
+            self.car_dict.pop(id)
         
     def armor_color_layer(self):
         # print('armor_color_layer!')
@@ -228,7 +254,7 @@ class Solutionv2:
                         #     armor_bbox,
                         #     )
             car_id_dict[id] = car.serial_id
-        # print(car_id_dict)
+        print(car_id_dict)
                         
     def project_layer(self, maper_points):
         serial_out = []
@@ -261,29 +287,53 @@ class Solutionv2:
                  mainWindow: MainUI, 
                  yolo_deepsort: YOLO_DEEPSORT, 
                  serial_sender: SerialSender):
+        maper = Maper(  mainWindow.getCameraX(),  
+                        mainWindow.getCameraY(),
+                        mainWindow.getCameraZ(),
+                        mainWindow.getPitch(),
+                        mainWindow.getYaw(),
+                        mainWindow.getRoll(),
+                        mainWindow.getPointsDis()
+                        )
+        is_first_run = True
         while 1:
             t1 = time.time()
             image = np.array(yolo_deepsort.src_img)
-            
+            camera = Camera(mainWindow.getCameraX(),  
+                            mainWindow.getCameraY(),
+                            mainWindow.getCameraZ(),
+                            mainWindow.getPitch(),
+                            mainWindow.getYaw(),
+                            mainWindow.getRoll(),
+                            mainWindow.getPointsDis()
+                            )
 
             if len(yolo_deepsort.out_img):
                 
-                maper = Maper(camera_x = mainWindow.getCameraX(),
-                            camera_y = mainWindow.getCameraY(),
-                            camera_z = mainWindow.getCameraZ(),
-                                r_x = mainWindow.getPitch(),
-                                yaw = mainWindow.getYaw(),
-                                roll= mainWindow.getRoll(),
-                                points_dis = mainWindow.getPointsDis())
-                maper_points = maper.get_points_map(image)
+                if not is_first_run:
+                    if camera != last_camera:
+                        maper.update(camera_x = camera.camera_x,
+                                     camera_y = camera.camera_y,
+                                     camera_z = camera.camera_z,
+                                     r_x = camera.r_x,
+                                     yaw = camera.yaw, 
+                                     roll = camera.roll)
+                        maper_points = maper.get_points_map(image)
+                else:
+                    is_first_run = False
+                    maper_points = maper.get_points_map(image)
                 vision_img = yolo_deepsort.out_img
                 # vision_img = maper.draw_points_2d(vision_img)
                 vision_img = maper.draw_points_noshow(yolo_deepsort.out_img)
                 # mainWindow.img = vision_img
+
+                # 几乎无性能影响
                 self.yolo_deepsort_layer(yolo_deepsort)
                 
+                # 影响最大
                 self.armor_color_layer()
                 
+                # 影响很大
                 serial_sender.Send(self.project_layer(maper_points))
 
                 spread = time.time() - t1
@@ -295,14 +345,18 @@ class Solutionv2:
                     # print(f'took {spread:.3f}s')
                     pass
                 else:
+                    print('good fps!', end='\r')
                     time.sleep(0.02)
+                    
             else:
                 time.sleep(0.02)
 
+            last_camera : Camera = camera
             if self.exit_flag == 0:
                 break
             # time.sleep(0.02)
         print("\nexit!")
+        # cv2.destroyAllWindows()
         exit(0)
     
     def Exit(self, 

@@ -38,40 +38,32 @@ class Maper:
         self.piexel_size = 4e-3
 
         self.mapper = []
+        try:
+            self.points_3d = np.load('src/cv_utils/' + Load_NPY)
+        except:
+            self.points_3d = np.load(Load_NPY)        
+
+    def update(self, camera_x = -4.8, 
+            camera_y = 3.8, 
+            camera_z = 1.2, 
+            r_x = 20,
+            yaw = 0,
+            roll = 0,
+            points_dis = 24):
+        self.camera_pos = np.array([camera_x, camera_y, camera_z], dtype=np.float32)
+        self.camera_dir = np.array([radians(r_x), radians(yaw), radians(roll)], dtype=np.float32)
+        self.points_dis = points_dis
 
     def get_points_map(self, image): # = np.zeros((1024, 1280, 3), dtype=np.uint8)
-        # 场地点云
 
-        # points_3d = []
-        # distance = 0.2
-        # x_len = int(13.879 // distance) + 1
-        # z_len = int(25.879 // distance) + 1
-
-        # x = 0
-        # z = 0
-        # while x < 13.879:
-        #     while z < 25.879:
-        #         points_3d.append([x, 0, z])
-        #         z += distance
-        #     x += distance
-        #     z = 0
-        try:
-            points_3d = np.load('src/cv_utils/' + Load_NPY)
-        except:
-            points_3d = np.load(Load_NPY)
-
-        # self.reshape_points_3d = np.reshape(points_3d, (x_len, z_len, 3))
-
-        points_3d = np.array(points_3d, dtype=np.float32)
+        points_3d = np.array(self.points_3d, dtype=np.float32)
 
         self.points_3d = points_3d.copy()
 
         # 图像尺寸
         image_width = image.shape[1]
         image_height = image.shape[0]
-        # print(image.shape, end='\r')
 
-        # d_pixel = 
         fx = self.focal_length / self.piexel_size
         fy = self.focal_length / self.piexel_size
         cx = image_width / 2
