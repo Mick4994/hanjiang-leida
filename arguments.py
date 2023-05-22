@@ -23,19 +23,28 @@ Rotato_Yaw = 0
 Rotato_roll = 0
 
 # 相机内参
+
+# 小相机
 Focal_Length = 4.2e-3
 Sensor_X = 5.37e-3
 Sensor_Y = 4.04e-3
-Unit_Size = 4e-6
-SCREEN_W = 3072 #3072
-SCREEN_H = 2048 #2048
+Unit_Size = 3e-6
+SCREEN_W = 1920 
+SCREEN_H = 1080 
 
+# 海康
+# Focal_Length = 16e-3
+# Sensor_X = 7.18e-3
+# Sensor_Y = 5.32e-3
+# Unit_Size = 2.4e-6
+# SCREEN_W = 3072 
+# SCREEN_H = 2048 
 
 # 投影点间距（调试界面的实时画面处）
 points_distance = 2
 
 # 硬件参数：
-COM = "COM5" # 串口号
+COM = "COM8" # 串口号
 SOURCE = "res/1080P5min.mp4" # "0" #"res/1080P.mp4" # ##视频/图片源 "1600x1200.png" "'res/1080P.mp4'"
 
 # yolo参数

@@ -12,7 +12,7 @@ from track import YOLO_DEEPSORT
 
 from keras.models import load_model
 from torch.autograd import Variable
-from src.cv_utils.projectPoints import Maper, CV2RM, red2blue
+from src.cv_utils.projectPoints import Maper, CV2RM, red2blue, RM2SER
 from src.myserial.Serial import SerialSender
 
 lr = np.array([156, 43, 46])  #红色hsv范围下限
@@ -254,7 +254,7 @@ class Solutionv2:
                         #     armor_bbox,
                         #     )
             car_id_dict[id] = car.serial_id
-        print(car_id_dict)
+        # print(car_id_dict)
                         
     def project_layer(self, maper_points):
         serial_out = []
@@ -276,9 +276,13 @@ class Solutionv2:
                         min_error = error
                         min_point_3d = point_3d
                 min_point_3d = CV2RM(min_point_3d)
+
                 if is_bule:
                     min_point_3d = red2blue(min_point_3d)
+
                 min_point_3d[0] += 0.3
+
+                min_point_3d = RM2SER(min_point_3d)
                 car.pos = min_point_3d
                 serial_out.append([car.serial_id, car.pos])
         return serial_out
@@ -317,7 +321,9 @@ class Solutionv2:
                                      camera_z = camera.camera_z,
                                      r_x = camera.r_x,
                                      yaw = camera.yaw, 
-                                     roll = camera.roll)
+                                     roll = camera.roll,
+                                     points_dis = camera.points_dis
+                                     )
                         maper_points = maper.get_points_map(image)
                 else:
                     is_first_run = False

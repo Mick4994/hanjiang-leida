@@ -47,4 +47,4 @@ if __name__ == "__main__":
             except:
                 pass
 
-    np.save('points_3d.npy', np.array(points_3d, dtype=np.float32))
+    np.save('0.2_points_3d.npy', np.array(points_3d, dtype=np.float32))

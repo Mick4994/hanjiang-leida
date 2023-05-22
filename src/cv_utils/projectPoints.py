@@ -13,6 +13,10 @@ def CV2RM(points_3d):
     x, y, z = points_3d
     return [z, x, -y]
 
+def RM2SER(points_3d):
+    x, y, z = points_3d
+    return [x, RM_FIELD_WEIGHT - y, z]
+
 def red2blue(points_3d):
     x, y, z = points_3d
     return [RM_FIELD_LENGTH - x, RM_FIELD_WEIGHT - y, z]
@@ -32,10 +36,10 @@ class Maper:
         self.points_dis = points_dis
 
         # 焦距与传感器尺寸
-        self.focal_length = 6
-        self.sensor_size_x = 5.37 # 1/2.7 inch
-        self.sensor_size_y = 4.04
-        self.piexel_size = 4e-3
+        self.focal_length = Focal_Length
+        self.sensor_size_x = Sensor_X # 1/2.7 inch
+        self.sensor_size_y = Sensor_Y
+        self.pixel_size = Unit_Size
 
         self.mapper = []
         try:
@@ -60,12 +64,13 @@ class Maper:
 
         self.points_3d = points_3d.copy()
 
+        # print(image.shape)
         # 图像尺寸
         image_width = image.shape[1]
         image_height = image.shape[0]
 
-        fx = self.focal_length / self.piexel_size
-        fy = self.focal_length / self.piexel_size
+        fx = self.focal_length / self.pixel_size
+        fy = self.focal_length / self.pixel_size
         cx = image_width / 2
         cy = image_height / 2
 
@@ -94,14 +99,18 @@ class Maper:
 
         maper_points = list(zip(self.points_3d, self.reshape_points_2d))
         return maper_points
-
+    
+    def get_all_map(self, maper_points):
+        all_maper = {}
+        # for point_2d, point_3d
+        return all_maper
 
     def draw_points_noshow(self, image):
-        for p in self.points_2d:
+        for p in self.points_2d[::self.points_dis]:
             cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
         return image
 
-    def draw_points_2d(self, image = np.zeros((1024, 1280, 3))):
+    def draw_points_2d(self, image = np.zeros((SCREEN_H, SCREEN_W, 3))):
         cv2.namedWindow("image", cv2.WINDOW_NORMAL)
         for p in self.points_2d[::self.points_dis]:
             cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
@@ -112,17 +121,50 @@ class Maper:
             exit(0)
         return image
 
-    def demo_display(self, image = np.zeros((1024, 1280, 3))):
+    def demo_display(self, image = np.zeros((SCREEN_H, SCREEN_W, 3))):
         cv2.namedWindow("image", cv2.WINDOW_NORMAL)
+        # i = 0
         for p in self.points_2d:
-            cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
+            cv2.circle(image, p[0], 9, (0, 255, 0), -1) 
+
+        # 宣判死刑
+            # print(p)
+        #     p = p[0]
+        #     # exit(0)
+        #     if 0 <= p[1] < SCREEN_H and 0 <= p[0] < SCREEN_W:
+        #         try:
+        #             # print(i, end='\r')
+        #             image[p[1]][p[0]] = (255, 255, 255)
+        #             image[p[1] + 1][p[0] + 1] = (255, 255, 255)
+        #             image[p[1] + 1][p[0] - 1] = (255, 255, 255)
+        #             image[p[1] - 1][p[0] + 1] = (255, 255, 255)
+        #             image[p[1] - 1][p[0] - 1] = (255, 255, 255)
+        #         except KeyboardInterrupt:
+        #             exit(0)
+        #         except:
+        #             # print('faild', end='\r')
+        #             pass
+        #     # i += 1
+        # print("")
+            # cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
+        
+        kernel = np.ones((1, 5), np.uint8)
+        gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)  
+        ret, binary = cv2.threshold(gray,127,255,cv2.THRESH_BINARY)  
+        # cv2.imshow('binary', binary)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+        binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel, anchor=(2, 0), iterations=5)
+        contours, _ = cv2.findContours(binary,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE) 
+        print(contours[0].shape)
+        cv2.drawContours(image,contours,-1,(0,0,255),3) 
 
         cv2.setMouseCallback("image", mouseCallback, 1)
         cv2.imshow("image", image)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    def demo_display_slow(self, image = np.zeros((1024, 1280, 3))):
+    def demo_display_slow(self, image = np.zeros((SCREEN_H, SCREEN_W, 3))):
         cv2.namedWindow("image", cv2.WINDOW_NORMAL)
         for p in self.reshape_points_2d:
             cv2.circle(image, p, 5, (0, 255, 0), -1) 
@@ -160,9 +202,9 @@ def testCamera():
 
 if __name__ == "__main__":
     maper = Maper()
-    maper.get_points_map()
-    print("\ncameraMatrix:", maper.K)
+    maper.get_points_map(np.zeros((SCREEN_H, SCREEN_W, 3), dtype=np.uint8))
+    print("\ncameraMatrix:\n", maper.K)
     # maper.get_points_map(np.zeros((1024, 1280, 3), dtype=np.uint8))
-    maper.demo_display()
+    maper.demo_display(np.zeros((SCREEN_H, SCREEN_W, 3), dtype=np.uint8))
     # maper.demo_display_slow()
     # testCamera()
