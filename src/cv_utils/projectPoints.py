@@ -106,14 +106,16 @@ class Maper:
         return all_maper
 
     def draw_points_noshow(self, image):
-        for p in self.points_2d[::self.points_dis]:
-            cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
+        if self.points_dis:
+            for p in self.points_2d[::self.points_dis]:
+                cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
         return image
 
     def draw_points_2d(self, image = np.zeros((SCREEN_H, SCREEN_W, 3))):
         cv2.namedWindow("image", cv2.WINDOW_NORMAL)
-        for p in self.points_2d[::self.points_dis]:
-            cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
+        if self.points_dis:
+            for p in self.points_2d[::self.points_dis]:
+                cv2.circle(image, p[0], 5, (0, 255, 0), -1) 
 
         cv2.imshow("image", image)
         if ord('b') == cv2.waitKey(1):

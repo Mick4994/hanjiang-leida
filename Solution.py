@@ -311,9 +311,9 @@ class Solutionv2:
                             mainWindow.getRoll(),
                             mainWindow.getPointsDis()
                             )
-
+            
             if len(yolo_deepsort.out_img):
-                
+                # mainWindow.loaded += 1
                 if not is_first_run:
                     if camera != last_camera:
                         maper.update(camera_x = camera.camera_x,
@@ -337,10 +337,10 @@ class Solutionv2:
                 self.yolo_deepsort_layer(yolo_deepsort)
                 
                 # 影响最大
-                self.armor_color_layer()
+                # self.armor_color_layer()
                 
-                # 影响很大
-                serial_sender.Send(self.project_layer(maper_points))
+                # # 影响很大
+                # serial_sender.Send(self.project_layer(maper_points))
 
                 spread = time.time() - t1
             
@@ -355,6 +355,18 @@ class Solutionv2:
                     time.sleep(0.02)
                     
             else:
+                if len(yolo_deepsort.src_img):
+                    maper_points = maper.get_points_map(yolo_deepsort.src_img)
+                    maper.update(camera_x = camera.camera_x,
+                                camera_y = camera.camera_y,
+                                camera_z = camera.camera_z,
+                                r_x = camera.r_x,
+                                yaw = camera.yaw, 
+                                roll = camera.roll,
+                                points_dis = camera.points_dis
+                                )
+                    vision_img = maper.draw_points_noshow(yolo_deepsort.src_img)
+                    mainWindow.img = vision_img
                 time.sleep(0.02)
 
             last_camera : Camera = camera

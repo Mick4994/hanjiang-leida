@@ -21,4 +21,12 @@
 #cache
 *.pyc
 
+#necessary res
+!points_3d.npy
+!new_ui.png
+!map_.png
+!mask_18.png
+!mask_37.png
+!mask_55.png
+
 !requirements.txt

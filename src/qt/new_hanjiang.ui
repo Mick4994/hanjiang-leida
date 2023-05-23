@@ -1,0 +1,932 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>leida</class>
+ <widget class="QDialog" name="leida">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1600</width>
+    <height>900</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1600</width>
+    <height>900</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1600</width>
+    <height>900</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>hanjiang-leida</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="11">
+    <normaloff>F:/Users/11402/.designer/backup</normaloff>F:/Users/11402/.designer/backup</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>1290</x>
+     <y>90</y>
+     <width>171</width>
+     <height>331</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="slider_list">
+    <item>
+     <widget class="QSlider" name="x_slider">
+      <property name="minimum">
+       <number>-500</number>
+      </property>
+      <property name="maximum">
+       <number>500</number>
+      </property>
+      <property name="value">
+       <number>-120</number>
+      </property>
+      <property name="sliderPosition">
+       <number>-120</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSlider" name="y_slider">
+      <property name="minimum">
+       <number>-500</number>
+      </property>
+      <property name="maximum">
+       <number>500</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSlider" name="z_slider">
+      <property name="minimum">
+       <number>-100</number>
+      </property>
+      <property name="maximum">
+       <number>500</number>
+      </property>
+      <property name="value">
+       <number>380</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSlider" name="pitch">
+      <property name="minimum">
+       <number>-180</number>
+      </property>
+      <property name="maximum">
+       <number>180</number>
+      </property>
+      <property name="value">
+       <number>20</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSlider" name="yaw">
+      <property name="minimum">
+       <number>-180</number>
+      </property>
+      <property name="maximum">
+       <number>180</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSlider" name="roll">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="minimum">
+       <number>-180</number>
+      </property>
+      <property name="maximum">
+       <number>180</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSlider" name="points_dis">
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="value">
+       <number>24</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>1090</x>
+     <y>90</y>
+     <width>81</width>
+     <height>331</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="args_list">
+    <item>
+     <widget class="QLabel" name="x_label">
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;x(cm):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="y_label">
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;y(cm):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="z_label">
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;z(cm):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="pitch_label">
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;pitch(deg):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="yaw_label">
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;yaw(deg):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="roll_label">
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;roll(deg):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="points_label">
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget{
+	background-color:rgb(255, 255, 255);
+	border-radius:5px;
+}</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;points_dis:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget_3">
+   <property name="geometry">
+    <rect>
+     <x>1190</x>
+     <y>90</y>
+     <width>81</width>
+     <height>331</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="spinBox_list">
+    <item>
+     <widget class="QSpinBox" name="x_spinBox">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="minimum">
+       <number>-500</number>
+      </property>
+      <property name="maximum">
+       <number>500</number>
+      </property>
+      <property name="value">
+       <number>-120</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="y_spinBox">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="minimum">
+       <number>-500</number>
+      </property>
+      <property name="maximum">
+       <number>500</number>
+      </property>
+      <property name="value">
+       <number>480</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="z_spinBox">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="minimum">
+       <number>-100</number>
+      </property>
+      <property name="maximum">
+       <number>500</number>
+      </property>
+      <property name="value">
+       <number>380</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="pitch_spinBox">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="minimum">
+       <number>-180</number>
+      </property>
+      <property name="maximum">
+       <number>180</number>
+      </property>
+      <property name="value">
+       <number>20</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="yaw_spinBox">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="minimum">
+       <number>-180</number>
+      </property>
+      <property name="maximum">
+       <number>180</number>
+      </property>
+      <property name="value">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="roll_spinBox">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="minimum">
+       <number>-180</number>
+      </property>
+      <property name="maximum">
+       <number>180</number>
+      </property>
+      <property name="value">
+       <number>180</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="poins_spinBox">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="value">
+       <number>24</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QPushButton" name="SetDefault">
+   <property name="geometry">
+    <rect>
+     <x>1480</x>
+     <y>380</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>SetDefault</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="serial_data">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>50</y>
+     <width>161</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:14pt; font-weight:300;&quot;&gt;串口消息&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QGraphicsView" name="CameraView">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1600</width>
+     <height>900</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>1600</width>
+     <height>900</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>1600</width>
+     <height>900</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{
+	background-image: url(:/1/F:/Users/11402/Pictures/hanjiangleida/new_ui.png);
+}</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="img_label">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>229</y>
+     <width>971</width>
+     <height>631</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{
+	border-radius:10px;
+	background-color: rgba(254, 254, 254, 123)
+}</string>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;显示实时画面&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="serial_data_background">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>100</y>
+     <width>401</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{
+	border-radius:10px;
+	background-color: rgba(254, 254, 254, 123)
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="serial_send">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>100</y>
+     <width>371</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;None&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="map">
+   <property name="geometry">
+    <rect>
+     <x>1060</x>
+     <y>550</y>
+     <width>511</width>
+     <height>311</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{
+	border-radius:10px;
+	background-color: rgba(254, 254, 254, 123)
+}
+</string>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;小地图&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>50</y>
+     <width>521</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{
+	border-radius:10px;
+	background-color: rgba(254, 254, 254, 123)
+}</string>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;font-family:'Microsoft YaHei'; font-size:9pt; font-weight:300;&quot;&gt;坐标消息&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <zorder>CameraView</zorder>
+  <zorder>verticalLayoutWidget</zorder>
+  <zorder>verticalLayoutWidget_2</zorder>
+  <zorder>verticalLayoutWidget_3</zorder>
+  <zorder>SetDefault</zorder>
+  <zorder>serial_data</zorder>
+  <zorder>img_label</zorder>
+  <zorder>serial_data_background</zorder>
+  <zorder>serial_send</zorder>
+  <zorder>map</zorder>
+  <zorder>label_2</zorder>
+ </widget>
+ <resources>
+  <include location="br.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>roll</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>roll_spinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>625</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>570</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>roll_spinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>roll</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>573</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>643</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yaw</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>yaw_spinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>621</x>
+     <y>264</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>561</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yaw_spinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>yaw</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>560</x>
+     <y>264</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>631</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pitch_spinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>pitch</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>565</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>660</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>z_spinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>z_slider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>573</x>
+     <y>184</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>623</x>
+     <y>184</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>z_slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>z_spinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>644</x>
+     <y>184</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>542</x>
+     <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>y_slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>y_spinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>638</x>
+     <y>144</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>563</x>
+     <y>144</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>y_spinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>y_slider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>587</x>
+     <y>144</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>622</x>
+     <y>144</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>x_spinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>x_slider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>564</x>
+     <y>104</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>624</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>x_slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>x_spinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>640</x>
+     <y>104</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>584</x>
+     <y>103</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pitch</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>pitch_spinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>668</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>571</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>points_dis</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>poins_spinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>645</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>574</x>
+     <y>331</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>poins_spinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>points_dis</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>564</x>
+     <y>338</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>625</x>
+     <y>337</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

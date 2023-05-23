@@ -9,6 +9,7 @@ class SerialSender:
         self.crc16 = Crc16()
         self.com = com
         self.failed = False
+        self.xcnp_map = []
 
         sof = b'\xa5' # 数据帧起始字节，固定值为0xA5
         data_length = b'\x0d' # 数据帧中data的长度
@@ -23,6 +24,7 @@ class SerialSender:
         self.send_data = []
 
     def Send(self, xcnp_map):
+        self.xcnp_map = xcnp_map
         for id, min_point_3d in xcnp_map:
             id = bytes([id])
             xyz_bytes = np.array(min_point_3d, dtype=np.float32).tobytes()
