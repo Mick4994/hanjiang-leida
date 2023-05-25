@@ -47,6 +47,7 @@ class MainUI(QMainWindow, Ui_leida):
 
 
     def paintEvent(self, a0: QPaintEvent):
+        # t1 = time.time()
         # try:
         frame = self.img.copy()
         self.frame_width = self.img_label.geometry().width()
@@ -99,6 +100,8 @@ class MainUI(QMainWindow, Ui_leida):
                 self.css_head + send + self.css_end))
 
         time.sleep(0.02)
+        # t2 = time.time()
+        # print(f'took {t1 - t2 :.2f} s')
         self.update()
         # except:
         #     time.sleep(1)

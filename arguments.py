@@ -9,12 +9,17 @@ cls2serial = [0, 0, 0] + red_robot_id_serial + [0, 0] + blue_robot_id_serial + [
 RM_FIELD_LENGTH = 28.052
 RM_FIELD_WEIGHT = 15.035
 Load_NPY = 'points_3d.npy' #'test_points_3d.npy'
+Load_Four_NPY = '0.2_4_points_3d.npy'
 
 # 相机外参 #云台相机位姿
-Camera_X = -4.8 
+Camera_X = -5.2
 Camera_Y = 3.8
-Camera_Z = 1.2
-Rotato_X = 20
+Camera_Z = 1.4
+Rotato_X = 17.5
+# Camera_X = -4.8
+# Camera_Y = 3.8
+# Camera_Z = 1.2
+# Rotato_X = 20
 # Camera_X = -1.5
 # Camera_Y = 1.4
 # Camera_Z = -0.5
@@ -44,7 +49,7 @@ SCREEN_H = 1080
 points_distance = 2
 
 # 硬件参数：
-COM = "COM4" # 串口号
+COM = "COM11" # 串口号 (自动化，无需再调)
 SOURCE = "res/1080P5min.mp4" # "0" #"res/1080P.mp4" # ##视频/图片源 "1600x1200.png" "'res/1080P.mp4'"
 
 # yolo参数
@@ -59,3 +64,6 @@ names = ['car', 'armor']
 #          'armor-red-6','armor-red-8',
 #          'armor-blue-1','armor-blue-2','armor-blue-3','armor-blue-4','armor-blue-5',
 #          'armor-blue-6','armor-blue-8']
+
+# maper.get_points_map 消耗20-30ms
+# yolo_deepsort 消耗50-70ms

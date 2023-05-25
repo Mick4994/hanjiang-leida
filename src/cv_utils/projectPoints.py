@@ -1,6 +1,8 @@
 import numpy as np
 import cv2
+import time
 from math import radians
+from copy import deepcopy
 try:
     from arguments import *
 except:
@@ -44,8 +46,10 @@ class Maper:
         self.mapper = []
         try:
             self.points_3d = np.load('src/cv_utils/' + Load_NPY)
+            self.point_four_3d = np.load('src/cv_utils/' + Load_Four_NPY)
         except:
-            self.points_3d = np.load(Load_NPY)        
+            self.points_3d = np.load(Load_NPY)
+            self.point_four_3d = np.load(Load_Four_NPY)        
 
     def update(self, camera_x = -4.8, 
             camera_y = 3.8, 
@@ -61,7 +65,7 @@ class Maper:
     def get_points_map(self, image): # = np.zeros((1024, 1280, 3), dtype=np.uint8)
 
         points_3d = np.array(self.points_3d, dtype=np.float32)
-
+        points_four_3d = np.array(self.point_four_3d, dtype=np.float32)
         self.points_3d = points_3d.copy()
 
         # print(image.shape)
@@ -93,11 +97,17 @@ class Maper:
 
         points_2d, _ = cv2.projectPoints(
             points_3d, self.camera_dir, tvec, K, None)
+        points_four_2d, _ = cv2.projectPoints(
+            points_four_3d, self.camera_dir, tvec, K, None)
+        self.points_four_2d = np.array(points_four_2d, dtype=np.int32)
         self.points_2d = np.array(points_2d, dtype=np.int32)
         # print(self.points_2d.shape)
+        self.reshape_points_four_2d = np.reshape(self.points_four_2d, (self.points_four_2d.shape[0], 2))
         self.reshape_points_2d = np.reshape(self.points_2d, (self.points_2d.shape[0], 2))
 
         maper_points = list(zip(self.points_3d, self.reshape_points_2d))
+        # print('finished project!')
+        self.get_all_maper()
         return maper_points
     
     def get_all_map(self, maper_points):
@@ -152,7 +162,7 @@ class Maper:
         
         kernel = np.ones((1, 5), np.uint8)
         gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)  
-        ret, binary = cv2.threshold(gray,127,255,cv2.THRESH_BINARY)  
+        _, binary = cv2.threshold(gray,127,255,cv2.THRESH_BINARY)  
         # cv2.imshow('binary', binary)
         # cv2.waitKey(0)
         # cv2.destroyAllWindows()
@@ -165,6 +175,7 @@ class Maper:
         cv2.imshow("image", image)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
+        
 
     def demo_display_slow(self, image = np.zeros((SCREEN_H, SCREEN_W, 3))):
         cv2.namedWindow("image", cv2.WINDOW_NORMAL)
@@ -175,6 +186,23 @@ class Maper:
             if ord('b') == cv2.waitKey(1):
                 cv2.destroyAllWindows()
                 exit(0)
+
+    def get_all_maper(self):
+        self.image_3d = np.zeros((SCREEN_H, SCREEN_W, 3), dtype=np.uint8)
+        # print(len(self.reshape_points_four_2d))
+        for i in range(len(self.reshape_points_four_2d))[::4]:
+            # t1 = time.time()
+            
+            temp_points = [self.reshape_points_four_2d[i + j] for j in range(4)]
+            k = int(i / 4)
+            color = [j * 5 for j in self.points_3d[k]]
+            # print(color)
+            self.image_3d = cv2.fillConvexPoly(self.image_3d, np.array(temp_points), color)
+            # print(f'took {(time.time() - t1) * 1000:.2f} ms', end='\r')
+        cv2.imshow("img", self.image_3d)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+        return self.image_3d
 
 def mouseCallback(event, x, y, flags, param):
     print(f"event:{event:<20}x:{x:<10}y:{y:<10}flag:{flags:<20}", end='\r')

@@ -8,7 +8,7 @@ from arguments import *
 from Solution import Solutionv1, Solutionv2
 from detect import YOLO_Detect
 from track import YOLO_DEEPSORT
-from src.myserial.Serial import SerialSender
+from src.myserial.Serial import SerialSender, find_COM
 from src.qt.ui import MainUI
 
 def main_v1():    
@@ -18,7 +18,7 @@ def main_v2():
     return Solutionv2(), YOLO_DEEPSORT(SOURCE)
 
 if __name__ == "__main__":
-
+    COM = find_COM()
     # solution, yolo_thread = main_v1()
     solution, yolo = main_v2()
     yolo_thread = threading.Thread(target=yolo.detect,

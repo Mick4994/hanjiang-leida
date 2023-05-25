@@ -3,6 +3,7 @@ import cv2
 import sys
 import numpy as np
 import time
+import threading
 from math import sqrt
 from arguments import *
 from src.qt.ui import MainUI
@@ -287,6 +288,29 @@ class Solutionv2:
                 serial_out.append([car.serial_id, car.pos])
         return serial_out
 
+    def new_project_layer(self, maper : Maper):
+        image_3d = maper.image_3d
+        serial_out = []
+        for id, car in self.car_dict.items():
+            if IsEnemy(car.color):
+                car_bbox = car.bbox
+                car_center_x = car_bbox[0] + int((car_bbox[2] - car_bbox[0]) / 2)
+                car_center_y = car_bbox[3] # y2
+                pos = image_3d[car_center_y][car_center_x] / 5
+                
+                pos = CV2RM(pos)
+                if is_bule:
+                    pos = red2blue(pos)
+
+                pos[0] += 0.3
+
+                pos = RM2SER(pos)
+                car.pos = pos
+                serial_out.append([car.serial_id, car.pos])
+        return serial_out
+
+
+
     def backbone(self,
                  mainWindow: MainUI, 
                  yolo_deepsort: YOLO_DEEPSORT, 
@@ -326,37 +350,50 @@ class Solutionv2:
                                      )
                         maper_points = maper.get_points_map(image)
                 else:
+                    # print('first loading maper points!')
                     is_first_run = False
                     maper_points = maper.get_points_map(image)
+                    # print('finished load!')
                 vision_img = yolo_deepsort.out_img
                 # vision_img = maper.draw_points_2d(vision_img)
                 vision_img = maper.draw_points_noshow(yolo_deepsort.out_img)
-                # mainWindow.img = vision_img
+                mainWindow.img = vision_img
 
                 # 几乎无性能影响
                 self.yolo_deepsort_layer(yolo_deepsort)
                 
                 # 影响最大
-                # self.armor_color_layer()
+                self.armor_color_layer()
                 
-                # # 影响很大
+                # 影响很大
                 # serial_sender.Send(self.project_layer(maper_points))
 
+                
+                # 影响很小
+                
+                serial_out = self.new_project_layer(maper)
+                
+                # print(f'took {spread * 1000:.3f}ms', end='\r')
+
+                serial_thread = threading.Thread(target=serial_sender.Send, args=(serial_out,), daemon=True)
+                serial_thread.start()
+
                 spread = time.time() - t1
-            
                 if spread > 0.003:
                     
                     drawFPS(vision_img, spread)
                     mainWindow.img = vision_img
-                    # print(f'took {spread:.3f}s')
-                    pass
                 else:
-                    print('good fps!', end='\r')
+                    # print('good fps!', end='\r')
                     time.sleep(0.02)
                     
             else:
                 if len(yolo_deepsort.src_img):
-                    maper_points = maper.get_points_map(yolo_deepsort.src_img)
+                    if is_first_run:
+                        is_first_run = False
+                        # print('first loading maper points!')
+                        maper_points = maper.get_points_map(yolo_deepsort.src_img)
+                        # print('finished load!')
                     maper.update(camera_x = camera.camera_x,
                                 camera_y = camera.camera_y,
                                 camera_z = camera.camera_z,
@@ -367,6 +404,7 @@ class Solutionv2:
                                 )
                     vision_img = maper.draw_points_noshow(yolo_deepsort.src_img)
                     mainWindow.img = vision_img
+                    # mainWindow.img = yolo_deepsort.src_img
                 time.sleep(0.02)
 
             last_camera : Camera = camera

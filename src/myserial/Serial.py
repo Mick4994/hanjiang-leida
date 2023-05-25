@@ -3,6 +3,17 @@ import numpy as np
 from crccheck.crc import Crc8, Crc16
 from random import randint
 
+
+def find_COM():
+    from serial.tools import list_ports
+    port_list = list(list_ports.comports())
+    for port in port_list:
+        if port.description[:-7] == "USB-SERIAL CH340":
+            print("串口信息：", port.description)
+            return port.name
+    else:
+        assert True, "串口未连接！"
+
 class SerialSender:
     def __init__(self, com = "COM4") -> None:
         self.crc8 = Crc8()
@@ -48,7 +59,7 @@ class SerialSender:
                             stopbits=1) as my_serial:
                     my_serial.write(send_data)
 
-                print(f"{randint(0, 9)} send_data:{send_data.hex():<20}", end='\r')
+                # print(f"{randint(0, 9)} send_data:{send_data.hex():<20}", end='\r')
 
             except:
                 if not self.failed:
