@@ -24,6 +24,7 @@
 
 #necessary res
 !points_3d.npy
+!0.2_4_points_3d.npy
 !new_ui.png
 !map_.png
 !mask_18.png
