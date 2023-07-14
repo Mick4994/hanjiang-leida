@@ -20,6 +20,7 @@
 
 #cache
 *.pyc
+*.log
 
 #necessary res
 !points_3d.npy
@@ -30,3 +31,5 @@
 !mask_55.png
 
 !requirements.txt
+
+!doc/*

@@ -19,7 +19,7 @@ def main_v2():
 
 if __name__ == "__main__":
     COM = find_COM()
-    # solution, yolo_thread = main_v1()
+    solution, yolo_thread = main_v1()
     solution, yolo = main_v2()
     yolo_thread = threading.Thread(target=yolo.detect,
                                    args=(solution, ),
@@ -27,6 +27,8 @@ if __name__ == "__main__":
                                   )
     yolo_thread.start()
     serial_sender = SerialSender(com=COM)
+    recv_thread = threading.Thread(target=serial_sender.recv, daemon=True)
+    recv_thread.start()
     leida_app = QApplication(sys.argv)
     mainWindow = MainUI(serialer=serial_sender)
     mainWindow.show()

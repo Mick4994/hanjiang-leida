@@ -49,8 +49,10 @@ SCREEN_H = 1080
 points_distance = 2
 
 # 硬件参数：
-COM = "COM11" # 串口号 (自动化，无需再调)
-SOURCE = "res/1080P5min.mp4" # "0" #"res/1080P.mp4" # ##视频/图片源 "1600x1200.png" "'res/1080P.mp4'"
+COM = "COM14" # 串口号 (自动化，无需再调)
+SOURCE = "res/1080P5min.mp4" # "0" 
+#"res/1080P.mp4" # ##视频/图片源 "1600x1200.png" "'res/1080P.mp4'"
+# res/hiv_left1.avi
 
 # yolo参数
 Yolo_Weight = '20230505_2cls.pt'

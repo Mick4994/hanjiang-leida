@@ -32,10 +32,22 @@ class Maper:
             yaw = 0,
             roll = 0,
             points_dis = 24) -> None:
+        
+        """ 重点方法：初始化投影参数（相机内外参，从文件中加载的三维点云/网格）
+            :param camera_x: RM坐标系下x坐标的偏移
+            :param camera_y: RM坐标系下y坐标的偏移
+            :param camera_z: RM坐标系下z坐标的偏移
+            :param r_x: 俯仰角
+            :param yaw: 偏航角
+            :param roll: 翻滚角
+            :param points_dis: 点云间隔
+
+            :return None
+        """
+                
         # 相机外参
         self.camera_pos = np.array([camera_x, camera_y, camera_z], dtype=np.float32)
         self.camera_dir = np.array([radians(r_x), radians(yaw), radians(roll)], dtype=np.float32)
-        self.points_dis = points_dis
 
         # 焦距与传感器尺寸
         self.focal_length = Focal_Length
@@ -43,7 +55,11 @@ class Maper:
         self.sensor_size_y = Sensor_Y
         self.pixel_size = Unit_Size
 
+        # 映射关系
         self.mapper = []
+
+        # 点云参数
+        self.points_dis = points_dis
         try:
             self.points_3d = np.load('src/cv_utils/' + Load_NPY)
             self.point_four_3d = np.load('src/cv_utils/' + Load_Four_NPY)
@@ -57,14 +73,35 @@ class Maper:
             r_x = 20,
             yaw = 0,
             roll = 0,
-            points_dis = 24):
+            points_dis = 24) -> None:
+        
+        """ 重点方法：更新因为相机外参变化而导致点云/网格模型在相机上的投影变化的方法
+            :param camera_x: RM坐标系下x坐标的偏移
+            :param camera_y: RM坐标系下y坐标的偏移
+            :param camera_z: RM坐标系下z坐标的偏移
+            :param r_x: 俯仰角
+            :param yaw: 偏航角
+            :param roll: 翻滚角
+            :param points_dis: 点云间隔
+
+            :return None
+        """
+
+        # 相机在RM坐标系下的平移坐标，用于后面坐标系变换成相机坐标系的平移向量
         self.camera_pos = np.array([camera_x, camera_y, camera_z], dtype=np.float32)
+
+        # 相机在RM坐标系下的欧拉角，用于后面坐标系变换成相机坐标系的在旋转向量
         self.camera_dir = np.array([radians(r_x), radians(yaw), radians(roll)], dtype=np.float32)
+
+        # 点云间距
         self.points_dis = points_dis
 
     def get_points_map(self, image): # = np.zeros((1024, 1280, 3), dtype=np.uint8)
 
+        # 点云模型
         points_3d = np.array(self.points_3d, dtype=np.float32)
+
+        # 网格模型
         points_four_3d = np.array(self.point_four_3d, dtype=np.float32)
         self.points_3d = points_3d.copy()
 
@@ -199,9 +236,9 @@ class Maper:
             # print(color)
             self.image_3d = cv2.fillConvexPoly(self.image_3d, np.array(temp_points), color)
             # print(f'took {(time.time() - t1) * 1000:.2f} ms', end='\r')
-        cv2.imshow("img", self.image_3d)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        # cv2.imshow("img", self.image_3d)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
         return self.image_3d
 
 def mouseCallback(event, x, y, flags, param):

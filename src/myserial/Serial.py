@@ -1,16 +1,19 @@
 import serial
+import time
+from src.mylog import log_init
 import numpy as np
 from crccheck.crc import Crc8, Crc16
 from random import randint
-
+from serial.tools import list_ports
 
 def find_COM():
-    from serial.tools import list_ports
     port_list = list(list_ports.comports())
     for port in port_list:
-        if port.description[:-7] == "USB-SERIAL CH340":
+        if port.description[:16] == "USB-SERIAL CH340":
             print("串口信息：", port.description)
             return port.name
+        else:
+            print(port.description[:16])
     else:
         assert True, "串口未连接！"
 
@@ -21,6 +24,8 @@ class SerialSender:
         self.com = com
         self.failed = False
         self.xcnp_map = []
+        
+        self.logger = log_init(path="./log/serial_log/")
 
         sof = b'\xa5' # 数据帧起始字节，固定值为0xA5
         data_length = b'\x0d' # 数据帧中data的长度
@@ -33,6 +38,11 @@ class SerialSender:
         self.head_data = frame_header + cmd_id
 
         self.send_data = []
+        self.serial_com = serial.Serial(port=self.com, 
+                                        baudrate=115200, 
+                                        bytesize=8, 
+                                        stopbits=1
+                                        )
 
     def Send(self, xcnp_map):
         self.xcnp_map = xcnp_map
@@ -52,18 +62,34 @@ class SerialSender:
 
             self.send_data = send_data
 
+            # try:
+            #     with serial.Serial(port=self.com, 
+            #                 baudrate=115200, 
+            #                 bytesize=8, 
+            #                 stopbits=1) as my_serial:
             try:
-                with serial.Serial(port=self.com, 
-                            baudrate=115200, 
-                            bytesize=8, 
-                            stopbits=1) as my_serial:
-                    my_serial.write(send_data)
+                self.serial_com.write(send_data)
 
                 # print(f"{randint(0, 9)} send_data:{send_data.hex():<20}", end='\r')
 
             except:
                 if not self.failed:
-                    print("send failed, please check serial connect")
+                    self.logger.warning("send failed, please check serial connect")
+
+    def recv(self):
+        self.logger.info("start logging recv data")
+        while 1:
+            try:
+                data = self.serial_com.read()
+                if len(data):
+                    hex_data = data.hex()
+                    self.logger.info(hex_data)
+                    # with open('log/serial_log/.log')
+                    
+            except:
+                pass
+            time.sleep(0.02)
+            
                     
 if __name__ == "__main__":
 
