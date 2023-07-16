@@ -46,8 +46,8 @@ class Maper:
         """
                 
         # 相机外参
-        self.camera_pos = np.array([camera_x, camera_y, camera_z], dtype=np.float32)
-        self.camera_dir = np.array([radians(r_x), radians(yaw), radians(roll)], dtype=np.float32)
+        self.camera_position = np.array([camera_x, camera_y, camera_z], dtype=np.float32)
+        self.camera_euler_angles = np.array([radians(r_x), radians(yaw), radians(roll)], dtype=np.float32)
 
         # 焦距与传感器尺寸
         self.focal_length = Focal_Length
@@ -88,10 +88,10 @@ class Maper:
         """
 
         # 相机在RM坐标系下的平移坐标，用于后面坐标系变换成相机坐标系的平移向量
-        self.camera_pos = np.array([camera_x, camera_y, camera_z], dtype=np.float32)
+        self.camera_position = np.array([camera_x, camera_y, camera_z], dtype=np.float32)
 
         # 相机在RM坐标系下的欧拉角，用于后面坐标系变换成相机坐标系的在旋转向量
-        self.camera_dir = np.array([radians(r_x), radians(yaw), radians(roll)], dtype=np.float32)
+        self.camera_euler_angles = np.array([radians(r_x), radians(yaw), radians(roll)], dtype=np.float32)
 
         # 点云间距
         self.points_dis = points_dis
@@ -127,15 +127,17 @@ class Maper:
         self.K = K
         # print(K)
         # 计算被旋转后的平移向量
-        R, _ = cv2.Rodrigues(self.camera_dir) 
-        # R 叉乘 camera_pos
-        tvec = R @ self.camera_pos      
-        # rvec, _ = cv2.Rodrigues(R) 
+        R, _ = cv2.Rodrigues(self.camera_euler_angles) 
+        # print(R)
+        # R 叉乘 camera_position  输出的R为旋转矩阵，这里求出R是为了后面进行旋转变换，输入的camera_euler_angles为旋转向量
+        tvec = R @ self.camera_position      
+        # 平移向量(相机坐标系下)在旋转向量前叉乘，请从线性变换先后顺序上去想，是先将相机欧拉角转后再平移
 
+        # cv2.projectPoints接收的是在相机坐标系下的平移向量和旋转向量
         points_2d, _ = cv2.projectPoints(
-            points_3d, self.camera_dir, tvec, K, None)
+            points_3d, self.camera_euler_angles, tvec, K, None)
         points_four_2d, _ = cv2.projectPoints(
-            points_four_3d, self.camera_dir, tvec, K, None)
+            points_four_3d, self.camera_euler_angles, tvec, K, None)
         self.points_four_2d = np.array(points_four_2d, dtype=np.int32)
         self.points_2d = np.array(points_2d, dtype=np.int32)
         # print(self.points_2d.shape)
@@ -268,7 +270,14 @@ def testCamera():
 
 
 if __name__ == "__main__":
-    maper = Maper()
+    maper = Maper(
+        Camera_X, 
+        Camera_Y,
+        Camera_Z,
+        Rotato_X,
+        Rotato_Yaw,
+        Rotato_roll
+    )
     maper.get_points_map(np.zeros((SCREEN_H, SCREEN_W, 3), dtype=np.uint8))
     print("\ncameraMatrix:\n", maper.K)
     # maper.get_points_map(np.zeros((1024, 1280, 3), dtype=np.uint8))
