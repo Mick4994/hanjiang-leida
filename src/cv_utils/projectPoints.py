@@ -11,15 +11,20 @@ except:
     sys.path.append(os.getcwd())
     from arguments import *
 
+
+#三个转换的输入输出都为xyz轴
 def CV2RM(points_3d):
+    '''从CV定位坐标系转到RM裁判系统坐标系'''
     x, y, z = points_3d
     return [z, x, -y]
 
 def RM2SER(points_3d):
+    '''实际RM裁判系统的坐标系有误，重新修正了发往裁判系统坐标系的修正转换的方法'''
     x, y, z = points_3d
     return [x, RM_FIELD_WEIGHT - y, z]
 
 def red2blue(points_3d):
+    '''默认红方坐标系，如果是我方蓝方需要从红方坐标系转到蓝方'''
     x, y, z = points_3d
     return [RM_FIELD_LENGTH - x, RM_FIELD_WEIGHT - y, z]
 
@@ -129,7 +134,8 @@ class Maper:
         # 计算被旋转后的平移向量
         R, _ = cv2.Rodrigues(self.camera_euler_angles) 
         # print(R)
-        # R 叉乘 camera_position  输出的R为旋转矩阵，这里求出R是为了后面进行旋转变换，输入的camera_euler_angles为旋转向量
+        # R 叉乘 camera_position  输出的R为旋转矩阵，这里求出R是为了后面进行旋转变换，
+        # 输入的camera_euler_angles为旋转向量
         tvec = R @ self.camera_position      
         # 平移向量(相机坐标系下)在旋转向量前叉乘，请从线性变换先后顺序上去想，是先将相机欧拉角转后再平移
 
