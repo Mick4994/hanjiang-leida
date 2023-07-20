@@ -120,20 +120,19 @@ class Maper:
         cx = image_width / 2
         cy = image_height / 2
 
-        # 仿真内参
-        K = np.array([[fx, 0, cx], 
-                      [0, fy, cy], 
-                      [0,  0,  1]], dtype=np.float32)
-        # 真实内参
-        # K = np.array([[1579.6, 0, 627.56], 
+        # 标定内参
+        # self.K = np.array([[1579.6, 0, 627.56], 
         #               [0, 1579.87, 508.65],
         #               [0, 0, 1]], dtype=np.float32)
 
-        self.K = K
-        # print(K)
+        # 计算内参
+        self.K = np.array([[fx, 0, cx], 
+                      [0, fy, cy], 
+                      [0,  0,  1]], dtype=np.float32)
+
         # 计算被旋转后的平移向量
         R, _ = cv2.Rodrigues(self.camera_euler_angles) 
-        # print(R)
+
         # R 叉乘 camera_position  输出的R为旋转矩阵，这里求出R是为了后面进行旋转变换，
         # 输入的camera_euler_angles为旋转向量
         tvec = R @ self.camera_position      
@@ -141,9 +140,9 @@ class Maper:
 
         # cv2.projectPoints接收的是在相机坐标系下的平移向量和旋转向量
         points_2d, _ = cv2.projectPoints(
-            points_3d, self.camera_euler_angles, tvec, K, None)
+            points_3d, self.camera_euler_angles, tvec, self.K, None)
         points_four_2d, _ = cv2.projectPoints(
-            points_four_3d, self.camera_euler_angles, tvec, K, None)
+            points_four_3d, self.camera_euler_angles, tvec, self.K, None)
         self.points_four_2d = np.array(points_four_2d, dtype=np.int32)
         self.points_2d = np.array(points_2d, dtype=np.int32)
         # print(self.points_2d.shape)
