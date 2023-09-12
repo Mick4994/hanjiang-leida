@@ -34,3 +34,6 @@
 !requirements.txt
 
 !doc/*
+
+*.pdf
+*.html

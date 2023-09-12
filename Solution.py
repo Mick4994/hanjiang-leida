@@ -34,6 +34,17 @@ class Car:
         self.live = 5
 
     def getid_minist(self, model, src, armor):
+        """
+        输入到 Minist手写数字模型中获取装甲板id
+
+        :param model：加载的装甲板分类pt模型
+        :param src：单帧原图
+        :param armor：装甲板ROI
+
+        :return None
+        """
+
+        # 优化裁剪的ROI
         x1, y1, x2, y2 = armor
         w = x2 - x1
         h = y2 - y1
@@ -42,42 +53,53 @@ class Car:
         x1 -= int(0.1 * w) if x1 - int(0.1 * w) >= 0 else 0
         x2 += int(0.1 * w) if x2 + int(0.1 * w) < len(src[0]) else len(src[0]) - 1
         crop = src[y1: y2, x1 : x2]
+
+        # 二值化数字为了输入神经网络
         crop = np.array(crop)
         crop = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
         crop = cv2.resize(crop, (280, 280))
         _, crop = cv2.threshold(crop, 155, 255, cv2.THRESH_BINARY)
+
+        # 裁剪数字周围多余白区
         crop = cut_num(crop)
         crop = cv2.resize(crop, (28, 28))
-        cv2.imshow('test', crop)
-        cv2.waitKey(0)
-        cv2.destroyWindow('test')
+
+        # 接收输出识别到的数字，放入装甲板索引统计表
         out = model.predict(np.array([crop]))
         max_index = np.argmax(out[0].tolist())
         self.armor[max_index] += 1
-        print(max_index, out[0][max_index])
+
+        # 转换为裁判系统规定编号
         serial_shifting = 100 if self.color == 'blue' else 0
+
+        # 每次统计次数最多的编号为最为可能的该车编号
         self.serial_id = np.argmax(np.array(self.armor)) + serial_shifting
 
     def getid_lyk(self, model, src, armor, device):
         """
-        args : model, src, armor, device
-        return: None
+        输入到李彦宽的装甲板识别模型中获取装甲板id，
+        无返回值，结果保存在对象的 serial_id 属性中
+
+        :param model：加载的装甲板分类pt模型
+        :param src：单帧原图
+        :param armor：装甲板ROI
+        :param device：选择CPU或者GPU（'cuda' 或 'cpu'）
+
+        :return None
         """
         x1, y1, x2, y2 = armor
-        # w = x2 - x1
-        # h = y2 - y1
-        # y1 -= int(0.1 * h) if y1 - int(0.1 * h) >= 0 else 0
-        # y2 += int(0.1 * h) if y2 + int(0.1 * h) < len(src) else len(src) - 1 
-        # x1 -= int(0.1 * w) if x1 - int(0.1 * w) >= 0 else 0
-        # x2 += int(0.1 * w) if x2 + int(0.1 * w) < len(src[0]) else len(src[0]) - 1
+
+        #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓将裁剪的装甲板ROI二值化↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
         crop = src[y1: y2, x1 : x2]
         crop = np.array(crop)
         crop = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
-        # cv2.namedWindow('test',cv2.WINDOW_NORMAL)
         crop = cv2.resize(crop, (280, 280))
-        _, crop = cv2.threshold(crop, 155, 255, cv2.THRESH_BINARY)
-        crop = cv2.erode(crop, None, iterations=5)
-        crop = cv2.dilate(crop, None, iterations=5)
+        _, crop = cv2.threshold(crop, 155, 255, cv2.THRESH_BINARY) #二值化
+        crop = cv2.erode(crop, None, iterations=5) #先腐蚀
+        crop = cv2.dilate(crop, None, iterations=5) #后膨胀
+        #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑将裁剪的装甲板ROI二值化↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+        #↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓将斜向的数字通过仿射变换拉直↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
         coords = np.column_stack(np.where(crop > 0))
         _, _, angle =cv2.minAreaRect(coords)
         if angle > 45:
@@ -86,58 +108,79 @@ class Car:
             angle = -angle
         center = (280//2, 280//2)
         M = cv2.getRotationMatrix2D(center, angle, 1.0) 
-        crop = cv2.warpAffine(crop, M, (280,280), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)        # cv2.imshow('test', crop)
-        # cv2.waitKey(0)
-        # cv2.destroyWindow('test')
-        # crop = cv2.morphologyEx(crop, cv2.MORPH_OPEN, k) 
+        crop = cv2.warpAffine(crop, M, (280,280), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+        #↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑将斜向的数字通过仿射变换拉直↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
         crop = cut_num(crop)
+        # 裁剪装甲板数字周围多余的白色区域，使数字在图中的占比最大
+
         crop = cv2.resize(crop, (22, 30))
         _, crop = cv2.threshold(crop, 155, 255, cv2.THRESH_BINARY)
-        # cv2.imshow('test', crop)
-        # cv2.waitKey(0)
-        # cv2.destroyWindow('test')
+        # 注：在resize后需要再次二值化
+
+        # 转换到torch变量中输入模型，out接收输出
         crop = np.reshape(crop.astype(np.float32) / 255.0, (1, 1, crop.shape[0], crop.shape[1]))
         crop = torch.from_numpy(crop)
         input = Variable(crop)
-        # input = Variable(crop).to(device)
         out = model(input)
-        # print(out[0].tolist())
+
+        # 放入装甲板索引统计表，对应的编号统计＋1
         max_index = np.argmax(out[0].tolist())
         self.armor[max_index] += 1 
-        # print(max_index, out[0][max_index])
+
+        # 转换为裁判系统规定编号
         serial_shifting = 100 if self.color == 'blue' else 0
+
+        # 每次统计次数最多的编号为最为可能的该车编号
         self.serial_id = np.argmax(np.array(self.armor)) + serial_shifting
 
     def getColor(self, src, armor):
+        """
+        通过传统视觉，获取该车装甲板灯条的颜色，为了区分红蓝方
+        :param src：单帧原图
+        :param armor：装甲板ROI
+
+        :return None
+        """
         x1, y1, x2, y2 = armor
         crop = src[y1: y2, x1 : x2]
-        # cv2.namedWindow('test', cv2.WINDOW_NORMAL)
-        # cv2.imshow('test', crop)
-        # cv2.waitKey(0)
-        # cv2.destroyWindow('test')
+
+        # 转换为HSV色彩空间方便滤色
         crop = np.array(crop)
         cv2.resize(crop, (25, 25))
         hsv = cv2.cvtColor(crop, cv2.COLOR_BGR2HSV)
-        inRange_Red = cv2.inRange(hsv, lr, ur)  #滤去颜色
-        # cv2.imshow('test', inRange_Red)
-        # cv2.waitKey(0)
-        # cv2.destroyWindow('test')
+
+        # 分别对红蓝滤色
+        inRange_Red = cv2.inRange(hsv, lr, ur)  #滤剩红色
         inRange_Red = inRange_Red.reshape((inRange_Red.shape[0] * inRange_Red.shape[1]))
         red_count = inRange_Red.tolist().count(255)
-        inRange_Blue = cv2.inRange(hsv, lb, ub)  #滤去颜色
+        inRange_Blue = cv2.inRange(hsv, lb, ub)  #滤剩蓝色
         inRange_Blue = inRange_Blue.reshape((inRange_Blue.shape[0] * inRange_Blue.shape[1]))
         blue_count = inRange_Blue.tolist().count(255)
-        # print(red_count, blue_count)
+
+        # 超过 10 个像素才有效否则被返回
         if max([blue_count, red_count]) < 10:
             return
         self.color = "blue" if blue_count > red_count else "red"
 
 def cut_num(crop:np.ndarray):
+    """
+    在YOLO识别出装甲板的ROI基础上切出装甲板上的数字/图像
+    把二值图数字周围多余的白色区域裁剪掉
+    
+    :param crop：裁剪的ROI图像
+
+    :return crop：数字裁剪到占比最大的ROI图像
+    """
     up_bound = 0
     down_bound = 0
     len_crop = len(crop)
+
+    # 翻转图像
     len_crop_T = len(crop.T)
     crop_T = crop.T
+
+    # 截取纵向
     for x in range(len_crop):
         if crop[x].tolist().count(255) > 25 and not up_bound :
             up_bound = x
@@ -145,8 +188,11 @@ def cut_num(crop:np.ndarray):
             down_bound = len_crop - x
         if up_bound and down_bound:
             break
+
     left_bound = 0
     right_bound = 0
+
+    # 截取横向
     for x in range(len_crop_T):
         if crop_T[x].tolist().count(255) > 25 and not left_bound:
             left_bound = x
@@ -154,11 +200,13 @@ def cut_num(crop:np.ndarray):
             right_bound = len_crop_T - x
         if left_bound and right_bound:
             break
+
+    # 微调边距
     up_bound -= 3 if up_bound - 3 >= 0 else 0
     down_bound += 3 if down_bound + 3 < len_crop else len_crop - 1 
     left_bound -= 3 if left_bound - 3 >= 0 else 0
     right_bound += 3 if right_bound + 3 < len_crop_T else len_crop_T - 1
-    # print(up_bound, down_bound, left_bound, right_bound)
+
     return crop[up_bound:down_bound, left_bound:right_bound]
 
 def IsEnemy(color):
@@ -201,6 +249,9 @@ class Camera:
 
 
 class Solutionv2:
+    """
+    第二版本的程序主干（当前）
+    """
     def __init__(self) -> None:
         self.exit_flag = -1
 
@@ -215,6 +266,9 @@ class Solutionv2:
         self.setlive = 5
 
     def yolo_deepsort_layer(self, yolo_deepsort : YOLO_DEEPSORT):
+        """
+        YOLO 和 DEEPSORT 检测追踪层
+        """
         self.armor_bboxs = yolo_deepsort.armor_bboxs
         self.src_img = yolo_deepsort.src_img
 
@@ -235,8 +289,9 @@ class Solutionv2:
             self.car_dict.pop(id)
         
     def armor_color_layer(self):
-        # print('armor_color_layer!')
-        # print(len(self.armor_bboxs), len(self.car_bboxs))
+        """
+        装甲板识别层
+        """
         car_id_dict = {}
         for id, car in self.car_dict.items():
             for armor_bbox in self.armor_bboxs:
@@ -258,6 +313,13 @@ class Solutionv2:
         # print(car_id_dict)
                         
     def project_layer(self, maper_points):
+        """
+        旧图形学解算层（像素坐标系映射世界坐标系），体积碰撞法
+
+        :param maper_points：像素映射位置表
+
+        :return serial_out：输出到串口上传发送的数据（车辆编号和位置）
+        """
         serial_out = []
         for id, car in self.car_dict.items():
             if IsEnemy(car.color):
@@ -289,6 +351,13 @@ class Solutionv2:
         return serial_out
 
     def new_project_layer(self, maper : Maper):
+        """
+        新图形学解算层，哈希法
+
+        :param maper：像素坐标系映射世界坐标系的映射关系实例
+
+        :return serial_out：输出到串口上传发送的数据（车辆编号和位置）
+        """
         image_3d = maper.image_3d
         serial_out = []
         for id, car in self.car_dict.items():
@@ -323,6 +392,16 @@ class Solutionv2:
                         mainWindow.getRoll(),
                         mainWindow.getPointsDis()
                         )
+        """
+        程序骨干主函数，大循环在此
+
+        :param mainWindow：雷达的调参界面实例，传入是为了读取调参信息，这里是后端
+        :param yolo_deepsort：对单帧进行车辆目标检测追踪的线程实例
+        :param serial_sender：串口通讯的线程实例
+        :param maper：像素坐标系映射世界坐标系的映射关系通过参数信息计算的映射类
+
+        :return None
+        """
         is_first_run = True
         while 1:
             t1 = time.time()
@@ -417,6 +496,9 @@ class Solutionv2:
     
     def Exit(self, 
              yolo_detect: YOLO_DEEPSORT):
+        """
+        退出方法，本来没必要，但是yolo总是会卡死
+        """
         for i in range(10):
             yolo_detect.exit_flag = self.exit_flag
             time.sleep(0.1)
@@ -426,6 +508,9 @@ class Solutionv2:
 
 
 class Solutionv1:
+    """
+    第一版本的程序主干（适应性比赛期间，已废弃）
+    """
     def __init__(self) -> None:
         self.exit_flag = -1
 
@@ -521,6 +606,9 @@ class Solutionv1:
     
     def Exit(self, 
              yolo_detect: YOLO_Detect):
+        """
+        退出方法，本来没必要，但是yolo总是会卡死
+        """
         for i in range(10):
             yolo_detect.exit_flag = self.exit_flag
             time.sleep(0.1)
