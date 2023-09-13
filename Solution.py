@@ -290,7 +290,7 @@ class Solutionv2:
         
     def armor_color_layer(self):
         """
-        装甲板识别层
+        装甲板识别层：识别颜色，区分敌我，获取id层
         """
         car_id_dict = {}
         for id, car in self.car_dict.items():
@@ -314,7 +314,7 @@ class Solutionv2:
                         
     def project_layer(self, maper_points):
         """
-        旧图形学解算层（像素坐标系映射世界坐标系），体积碰撞法
+        （已弃用）旧图形学解算层（像素坐标系映射世界坐标系），体积碰撞法
 
         :param maper_points：像素映射位置表
 
@@ -509,7 +509,7 @@ class Solutionv2:
 
 class Solutionv1:
     """
-    第一版本的程序主干（适应性比赛期间，已废弃）
+    第一版本的程序主干（联调期间，已废弃）
     """
     def __init__(self) -> None:
         self.exit_flag = -1
