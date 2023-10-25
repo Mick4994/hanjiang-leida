@@ -267,7 +267,7 @@ class Solutionv2:
 
     def yolo_deepsort_layer(self, yolo_deepsort : YOLO_DEEPSORT):
         """
-        YOLO 和 DEEPSORT 检测追踪层
+        整理 YOLO 和 DEEPSORT 检测追踪输出的层
         """
         self.armor_bboxs = yolo_deepsort.armor_bboxs
         self.src_img = yolo_deepsort.src_img
@@ -384,14 +384,6 @@ class Solutionv2:
                  mainWindow: MainUI, 
                  yolo_deepsort: YOLO_DEEPSORT, 
                  serial_sender: SerialSender):
-        maper = Maper(  mainWindow.getCameraX(),  
-                        mainWindow.getCameraY(),
-                        mainWindow.getCameraZ(),
-                        mainWindow.getPitch(),
-                        mainWindow.getYaw(),
-                        mainWindow.getRoll(),
-                        mainWindow.getPointsDis()
-                        )
         """
         程序骨干主函数，大循环在此
 
@@ -402,10 +394,27 @@ class Solutionv2:
 
         :return None
         """
+        
+        # 投影算法maper映射关系对象初始化
+        maper = Maper(  mainWindow.getCameraX(),  
+                        mainWindow.getCameraY(),
+                        mainWindow.getCameraZ(),
+                        mainWindow.getPitch(),
+                        mainWindow.getYaw(),
+                        mainWindow.getRoll(),
+                        mainWindow.getPointsDis()
+                        )
+        
         is_first_run = True
+
+        # 进入主干循环
         while 1:
             t1 = time.time()
+
+            # 从YOLO_DEEPSORT实例中获取原图像
             image = np.array(yolo_deepsort.src_img)
+
+            # 初始化虚拟相机对象
             camera = Camera(mainWindow.getCameraX(),  
                             mainWindow.getCameraY(),
                             mainWindow.getCameraZ(),
@@ -415,10 +424,14 @@ class Solutionv2:
                             mainWindow.getPointsDis()
                             )
             
+            # 如果YOLO_DEEPSORT追踪实例有输出
             if len(yolo_deepsort.out_img):
                 # mainWindow.loaded += 1
+
                 if not is_first_run:
                     if camera != last_camera:
+
+                        # 当检测到虚拟相机位姿更新，映射关系对象随之更新
                         maper.update(camera_x = camera.camera_x,
                                      camera_y = camera.camera_y,
                                      camera_z = camera.camera_z,
@@ -427,15 +440,21 @@ class Solutionv2:
                                      roll = camera.roll,
                                      points_dis = camera.points_dis
                                      )
+                        
+                        # 用于可视化的投影点
                         maper_points = maper.get_points_map(image)
                 else:
                     # print('first loading maper points!')
                     is_first_run = False
                     maper_points = maper.get_points_map(image)
                     # print('finished load!')
+
+                # 获取目标追踪的可视化图像
                 vision_img = yolo_deepsort.out_img
                 # vision_img = maper.draw_points_2d(vision_img)
                 vision_img = maper.draw_points_noshow(yolo_deepsort.out_img)
+
+                # 传递到调试界面监视窗
                 mainWindow.img = vision_img
 
                 # 几乎无性能影响
@@ -448,16 +467,18 @@ class Solutionv2:
                 # serial_sender.Send(self.project_layer(maper_points))
 
                 
-                # 影响很小
-                
+                # 影响很小，新的映射对象解算层
                 serial_out = self.new_project_layer(maper)
                 
                 # print(f'took {spread * 1000:.3f}ms', end='\r')
 
+                # 串口通讯被多线程启动，防止拖慢主循环
                 serial_thread = threading.Thread(target=serial_sender.Send, args=(serial_out,), daemon=True)
                 serial_thread.start()
 
                 spread = time.time() - t1
+
+                # 帧率小于33帧就绘制帧率显示
                 if spread > 0.003:
                     
                     drawFPS(vision_img, spread)

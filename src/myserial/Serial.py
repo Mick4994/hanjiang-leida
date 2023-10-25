@@ -27,6 +27,8 @@ class SerialSender:
         
         self.logger = log_init(path="./log/serial_log/")
 
+
+        # 这里必须读一下裁判系统手册
         sof = b'\xa5' # 数据帧起始字节，固定值为0xA5
         data_length = b'\x0d' # 数据帧中data的长度
         seq = b'\x00' # 包序号   若不需要分包则为0
